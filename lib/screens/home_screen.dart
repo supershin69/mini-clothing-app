@@ -1,5 +1,5 @@
 import 'package:clothing_shop/models/product_model.dart';
-import 'package:clothing_shop/widgets/product_section.dart'; // 🎯 ဒီကောင်လေး သွင်းလိုက်မယ်
+import 'package:clothing_shop/widgets/product_section.dart'; 
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -14,7 +14,7 @@ class HomeScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // 🏷️ 1. Promo Banner Section
+          
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Container(

@@ -1,3 +1,5 @@
+import 'dart:math'; 
+import 'package:clothing_shop/screens/product_detail.dart';
 import 'package:flutter/material.dart';
 import '../models/product_model.dart';
 import 'clothing_card.dart';
@@ -16,10 +18,12 @@ class ProductSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final int displayCount = min(products.length, 4);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Section Title
+        
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
           child: Text(
@@ -32,27 +36,31 @@ class ProductSection extends StatelessWidget {
           ),
         ),
 
-        // Horizontal ListView
+        
         SizedBox(
           height: 250,
           child: ListView.builder(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             scrollDirection: Axis.horizontal,
-            // ပစ္စည်း ၄ ခု ပြသပြီး အဆုံးမှာ See All Card ပြမှာမို့လို့ ၅ ခုလို့ သတ်မှတ်ထားခြင်း
-            itemCount: 5, 
+            itemCount: displayCount + 1, 
             itemBuilder: (context, index) {
-              if (index == 4) {
+              if (index == displayCount) {
                 return _buildExploreMoreCard();
               }
 
-              // ပေးလိုက်တဲ့ Products List ထဲက ဒေတာကို ယူသုံးမယ်
               final product = products[index];
+              
+              
               return ClothingCard(
-                imageUrl: product.imageUrl,
-                title: product.name,
-                price: product.price,
+                product: product,
                 onTap: () {
-                  print("Tapped ${product.name} from $title");
+                  
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ProductDetailPage(product: product),
+                    ),
+                  );
                 },
               );
             },
@@ -62,7 +70,7 @@ class ProductSection extends StatelessWidget {
     );
   }
 
-  // အဆုံးမှာပြသမည့် See All Card
+  
   Widget _buildExploreMoreCard() {
     return GestureDetector(
       onTap: onSeeAllTap,
