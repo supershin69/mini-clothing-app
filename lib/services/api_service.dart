@@ -1,3 +1,4 @@
+import 'package:clothing_shop/models/auth_models.dart';
 import 'package:clothing_shop/models/product_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -48,6 +49,81 @@ class ApiService {
         return data.map((item) => ProductModel.fromJson(item)).toList();
       } else {
         throw Exception('Failed to load products');
+      }
+    } on DioException catch (e) {
+      print("❌ Dio Error Response: ${e.response?.data}");
+      throw Exception('Dio error: ${e.message}');
+    } catch (e) {
+      throw Exception('Unexpected error: $e');
+    }
+  }
+
+  Future<AuthResponseModel> registerUser({
+    required String name,
+    required String email,
+    required String password,
+  }) async {
+    try {
+      final response = await _dio.post('/auth/register', data: {
+        'name': name,
+        'email': email,
+        'password': password,
+      });
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final data = response.data;
+        final authResponse = AuthResponseModel.fromJson(data);
+        await _storage.write(key: 'auth_token', value: authResponse.accessToken);
+        return authResponse;
+      } else {
+        throw Exception('Failed to register user');
+      }
+    } on DioException catch (e) {
+      print("❌ Dio Error Response: ${e.response?.data}");
+      throw Exception('Dio error: ${e.message}');
+    } catch (e) {
+      throw Exception('Unexpected error: $e');
+    }
+  }
+
+  Future<AuthResponseModel> loginUser({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      final response = await _dio.post('/auth/login', data: {
+        'email': email,
+        'password': password,
+      });
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final data = response.data;
+        final authResponse = AuthResponseModel.fromJson(data);
+        await _storage.write(key: 'auth_token', value: authResponse.accessToken);
+        return authResponse;
+      } else {
+        throw Exception('Failed to login user');
+      }
+    } on DioException catch (e) {
+      print("❌ Dio Error Response: ${e.response?.data}");
+      throw Exception('Dio error: ${e.message}');
+    } catch (e) {
+      throw Exception('Unexpected error: $e');
+    }
+  }
+
+  Future<void> logoutUser() async {
+    await _storage.delete(key: 'auth_token');
+  }
+
+  Future<UserModel> fetchUserProfile() async {
+    try {
+      final response = await _dio.get('/auth/profile');
+      if (response.statusCode == 200) {
+        final data = response.data;
+        return UserModel.fromJson(data);
+      } else {
+        throw Exception('Failed to load user profile');
       }
     } on DioException catch (e) {
       print("❌ Dio Error Response: ${e.response?.data}");
