@@ -1,3 +1,4 @@
+import 'package:clothing_shop/screens/product_detail.dart';
 import 'package:flutter/material.dart';
 import '../models/product_model.dart';
 import '../widgets/clothing_card.dart';
@@ -10,7 +11,6 @@ class ClothingScreen extends StatefulWidget {
 }
 
 class _ClothingScreenState extends State<ClothingScreen> {
-
   String _searchQuery = '';
   String _selectedCategory = 'All';
 
@@ -18,12 +18,12 @@ class _ClothingScreenState extends State<ClothingScreen> {
 
   @override
   Widget build(BuildContext context) {
- 
+    
     final filteredProducts = mockProducts.where((product) {
       final matchesSearch = product.name.toLowerCase().contains(_searchQuery.toLowerCase());
       
       final matchesCategory = _selectedCategory == 'All' || 
-          product.gender.toLowerCase() == _selectedCategory.toLowerCase();
+          product.gender.name.toLowerCase() == _selectedCategory.toLowerCase();
 
       return matchesSearch && matchesCategory;
     }).toList();
@@ -34,7 +34,6 @@ class _ClothingScreenState extends State<ClothingScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           
-
           Padding(
             padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 8.0),
             child: TextField(
@@ -57,7 +56,7 @@ class _ClothingScreenState extends State<ClothingScreen> {
             ),
           ),
 
-      
+          
           SizedBox(
             height: 60,
             child: ListView.builder(
@@ -79,9 +78,8 @@ class _ClothingScreenState extends State<ClothingScreen> {
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
                       decoration: BoxDecoration(
-                     
                         color: isSelected ? const Color(0xFF1A1A1A) : const Color(0xFFF5F5F5),
-                        borderRadius: BorderRadius.circular(10), // Rounded edges
+                        borderRadius: BorderRadius.circular(10),
                       ),
                       child: Center(
                         child: Text(
@@ -100,7 +98,7 @@ class _ClothingScreenState extends State<ClothingScreen> {
             ),
           ),
 
-
+          
           Expanded(
             child: filteredProducts.isEmpty
                 ? _buildEmptyState() 
@@ -115,12 +113,17 @@ class _ClothingScreenState extends State<ClothingScreen> {
                     itemCount: filteredProducts.length,
                     itemBuilder: (context, index) {
                       final product = filteredProducts[index];
+                      
+                      
                       return ClothingCard(
-                        imageUrl: product.imageUrl,
-                        title: product.name,
-                        price: product.price,
+                        product: product,
                         onTap: () {
-                          print("Tapped inside Grid: ${product.name}");
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ProductDetailPage(product: product),
+                            ),
+                          );
                         },
                       );
                     },
