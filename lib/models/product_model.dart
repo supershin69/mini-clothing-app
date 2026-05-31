@@ -6,11 +6,11 @@ enum ProductStatus {
   DISCONTINUED 
 }
 
-Gender parseGender (String gender) {
+Gender parseGender (String? gender) {
   return Gender.values.firstWhere((e) => e.name == gender, orElse: () => Gender.UNISEX);
 }
 
-ProductStatus parseProductStatus (String status) {
+ProductStatus parseProductStatus (String? status) {
   switch (status) {
     case 'IN_STOCK':
       return ProductStatus.IN_STOCK;
@@ -64,7 +64,7 @@ class ProductVariantModel {
       size: json['size'] as String? ?? '',
       color: json['color'] as String?,
       stock: json['stock'] as int? ?? 0,
-      status: parseProductStatus(json['status'] as String),
+      status: parseProductStatus(json['status'] as String?),
     );
   }
 }
@@ -119,7 +119,7 @@ class ProductModel {
         description: json['description'] as String? ?? '',
         category: json['category'] as String? ?? 'Uncategorized',
         brand: json['brand'] as String?,
-        gender: parseGender(json['gender'] as String),
+        gender: parseGender(json['gender'] as String?),
         price: (json['price'] as num?)?.toDouble() ?? 0.0,
         variants: variantsList,
         images: imagesList,
