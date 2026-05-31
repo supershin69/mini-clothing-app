@@ -15,7 +15,7 @@ class ClothingCard extends StatelessWidget {
   Widget build(BuildContext context) {
     
     final bool isOutOfStock = product.variants.every(
-      (v) => v.stock == 0 || v.status == ProductStatus.outOfStock,
+      (v) => v.stock == 0 || v.status == ProductStatus.OUT_OF_STOCK,
     );
 
     return GestureDetector(

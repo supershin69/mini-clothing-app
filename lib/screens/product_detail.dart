@@ -29,7 +29,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
     
     _instockVariants = widget.product.variants.where((variant) {
-      return variant.stock > 0 && variant.status == ProductStatus.inStock;
+      return variant.stock > 0 && variant.status == ProductStatus.IN_STOCK;
     }).toList();
 
     
