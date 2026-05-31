@@ -9,25 +9,18 @@ class CartScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      
       body: Consumer<CartProvider>(
         builder: (context, cartProvider, child) {
-          
-          
           if (cartProvider.cartItems.isEmpty) {
             return _buildEmptyCart();
           }
 
           return Column(
             children: [
-              
-              
-              
               Expanded(
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      
                       ListView.builder(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
@@ -44,7 +37,7 @@ class CartScreen extends StatelessWidget {
                             ),
                             child: Row(
                               children: [
-                                
+                                // --- 🖼️ IMAGE WITH ERROR & LOADING BUILDER ---
                                 ClipRRect(
                                   borderRadius: BorderRadius.circular(8),
                                   child: Image.network(
@@ -52,11 +45,43 @@ class CartScreen extends StatelessWidget {
                                     width: 70,
                                     height: 70,
                                     fit: BoxFit.cover,
+                                    // 💡 ပုံဆွဲနေတုန်း ပြပေးမယ့် Loading Indicator
+                                    loadingBuilder: (context, child, loadingProgress) {
+                                      if (loadingProgress == null) return child;
+                                      return Container(
+                                        width: 70,
+                                        height: 70,
+                                        color: Colors.grey[100],
+                                        child: const Center(
+                                          child: SizedBox(
+                                            width: 16,
+                                            height: 16,
+                                            child: CircularProgressIndicator(
+                                              strokeWidth: 2, 
+                                              color: Color(0xFF1A1A1A),
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    // 💡 404 link ဖြစ်ဖြစ်၊ အင်တာနက်ပြတ်လို့ပဲဖြစ်ဖြစ် ပုံမတက်ရင် App မကွဲအောင် ထိန်းပေးမယ့်အပိုင်း
+                                    errorBuilder: (context, error, stackTrace) {
+                                      return Container(
+                                        width: 70,
+                                        height: 70,
+                                        color: Colors.grey[200],
+                                        child: const Icon(
+                                          Icons.broken_image_outlined, 
+                                          color: Colors.grey, 
+                                          size: 24,
+                                        ),
+                                      );
+                                    },
                                   ),
                                 ),
                                 const SizedBox(width: 16),
                                 
-                                
+                                // --- 📝 PRODUCT DETAILS ---
                                 Expanded(
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -81,11 +106,10 @@ class CartScreen extends StatelessWidget {
                                   ),
                                 ),
 
-                                
+                                // --- 🗑️ DELETE & QUANTITY CONTROLLER ---
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
-                                    
                                     IconButton(
                                       constraints: const BoxConstraints(),
                                       padding: EdgeInsets.zero,
@@ -93,7 +117,6 @@ class CartScreen extends StatelessWidget {
                                       onPressed: () => cartProvider.removeItem(item.id),
                                     ),
                                     const SizedBox(height: 12),
-                                    
                                     
                                     Container(
                                       decoration: BoxDecoration(
@@ -135,7 +158,6 @@ class CartScreen extends StatelessWidget {
                       const SizedBox(height: 20),
                       const Divider(indent: 16, endIndent: 16),
 
-                      
                       Padding(
                         padding: const EdgeInsets.all(20.0),
                         child: Column(
@@ -166,9 +188,6 @@ class CartScreen extends StatelessWidget {
                 ),
               ),
 
-              
-              
-              
               Container(
                 padding: EdgeInsets.fromLTRB(16, 12, 16, MediaQuery.of(context).padding.bottom + 12),
                 decoration: BoxDecoration(
@@ -182,7 +201,6 @@ class CartScreen extends StatelessWidget {
                   height: 50,
                   child: ElevatedButton(
                     onPressed: () {
-                      
                       showDialog(
                         context: context,
                         builder: (context) => AlertDialog(
@@ -217,7 +235,6 @@ class CartScreen extends StatelessWidget {
     );
   }
 
-  
   Widget _buildPriceRow(String label, String value, {bool isTotal = false}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -242,14 +259,16 @@ class CartScreen extends StatelessWidget {
     );
   }
 
-  
-  Widget _buildEmptyCart() {
+Widget _buildEmptyCart() {
     return const Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(Icons.shopping_cart_outlined, size: 64, color: Colors.grey),
-          SizedBox(height: 16),
+          
+          // 💡 ဒီနေရာမှာ Sxaxis: ကို ဖြုတ်ပြီး SizedBox ပုံမှန်အတိုင်း ပြန်ပြင်လိုက်ပါပြီ
+          SizedBox(height: 16), 
+          
           Text(
             "Your cart is empty!",
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.grey),
