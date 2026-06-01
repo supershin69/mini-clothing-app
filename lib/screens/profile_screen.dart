@@ -1,6 +1,6 @@
-import 'package:clothing_shop/models/auth_models.dart'; // ✅ UserModel အတွက် Import ပါ
-import 'package:clothing_shop/screens/order_screen.dart'; // ✅ OrderScreen အသစ်ကို Import ပါ
-import 'package:clothing_shop/services/api_service.dart';
+import '../models/auth_models.dart'; // ✅ UserModel အတွက် Import ပါ
+import '../screens/order_screen.dart'; // ✅ OrderScreen အသစ်ကို Import ပါ
+import '../services/api_service.dart';
 import 'package:flutter/material.dart';
 
 class ProfileScreen extends StatefulWidget {
