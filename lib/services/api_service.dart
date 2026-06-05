@@ -29,9 +29,10 @@ class ApiService {
           }
           return handler.next(options);
         },
-        onError: (DioException e, handler) {
+        onError: (DioException e, handler) async {
           if (e.response?.statusCode == 401) {
             // Handle unauthorized error (e.g., token expired)
+            await _storage.delete(key: 'auth_token');
           }
           return handler.next(e);
         }
@@ -42,7 +43,7 @@ class ApiService {
   //  ၁။ Server ဆီကို OTP ပို့ခိုင်းဖို့ လှမ်းပြောတဲ့ API (အသစ်တိုးထားတာ)
   Future<void> sendOtp({required String email}) async {
     try {
-      await _dio.post('/auth/send-otp', data: {'email': email});
+      await _dio.post('/auth/register', data: {'email': email});
     } on DioException catch (e) {
       print("❌ sendOtp Dio Error: ${e.response?.data}");
       throw Exception(e.response?.data['message'] ?? 'OTP ပို့ခြင်း မအောင်မြင်ပါ');
