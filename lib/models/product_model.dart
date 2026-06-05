@@ -1,4 +1,4 @@
-enum Gender { MEN, WOMEN, UNISEX }
+enum Gender { MALE, FEMALE, UNISEX }
 
 enum ProductStatus { 
   IN_STOCK,
@@ -6,11 +6,11 @@ enum ProductStatus {
   DISCONTINUED 
 }
 
-Gender parseGender (String gender) {
+Gender parseGender (String? gender) {
   return Gender.values.firstWhere((e) => e.name == gender, orElse: () => Gender.UNISEX);
 }
 
-ProductStatus parseProductStatus (String status) {
+ProductStatus parseProductStatus (String? status) {
   switch (status) {
     case 'IN_STOCK':
       return ProductStatus.IN_STOCK;
@@ -64,7 +64,7 @@ class ProductVariantModel {
       size: json['size'] as String? ?? '',
       color: json['color'] as String?,
       stock: json['stock'] as int? ?? 0,
-      status: parseProductStatus(json['status'] as String),
+      status: parseProductStatus(json['status'] as String?),
     );
   }
 }
@@ -119,7 +119,7 @@ class ProductModel {
         description: json['description'] as String? ?? '',
         category: json['category'] as String? ?? 'Uncategorized',
         brand: json['brand'] as String?,
-        gender: parseGender(json['gender'] as String),
+        gender: parseGender(json['gender'] as String?),
         price: (json['price'] as num?)?.toDouble() ?? 0.0,
         variants: variantsList,
         images: imagesList,
@@ -182,7 +182,7 @@ final List<ProductModel> mockProducts = [
     description: "100% breathable organic cotton tee featuring a subtle abstract chest print.",
     category: "Essentials",
     brand: null, 
-    gender: Gender.MEN,
+    gender: Gender.MALE,
     price: 18.00,
     images: [
       ProductImageModel(id: '301', imageUrl: "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?q=80&w=500&auto=format&fit=crop", isPrimary: true),
@@ -203,7 +203,7 @@ final List<ProductModel> mockProducts = [
     description: "Soft, ribbed knit cardigan with tortoiseshell buttons. Cozy yet stylish option for daily wear.",
     category: "Knitwear",
     brand: "VogueThreads",
-    gender: Gender.WOMEN,
+    gender: Gender.FEMALE,
     price: 26.99,
     images: [
       ProductImageModel(id: '401', imageUrl: "https://images.unsplash.com/photo-1614975058789-41316d0e2e9c?q=80&w=500&auto=format&fit=crop", isPrimary: true),
@@ -245,7 +245,7 @@ final List<ProductModel> mockProducts = [
     description: "Lightweight moisture-wicking fabric with an inner compression lining and zipper key-pocket.",
     category: "Activewear",
     brand: "ApexPerformance",
-    gender: Gender.MEN,
+    gender: Gender.MALE,
     price: 24.50,
     images: [
       ProductImageModel(id: '601', imageUrl: "https://images.unsplash.com/photo-1539185441755-769473a23570?q=80&w=500&auto=format&fit=crop", isPrimary: true),
@@ -265,7 +265,7 @@ final List<ProductModel> mockProducts = [
     description: "Breathable pure linen dress with an A-line silhouette and elegant cross-back tie styling.",
     category: "Dresses",
     brand: "BloomBoutique",
-    gender: Gender.WOMEN,
+    gender: Gender.FEMALE,
     price: 55.00,
     images: [
       ProductImageModel(id: '701', imageUrl: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=500&auto=format&fit=crop", isPrimary: true),
@@ -307,7 +307,7 @@ final List<ProductModel> mockProducts = [
     description: "Stretchy form-fitting tank top made with premium organic cotton blend. A seasonal layering essential.",
     category: "Essentials",
     brand: null,
-    gender: Gender.WOMEN,
+    gender: Gender.FEMALE,
     price: 14.00,
     images: [
       ProductImageModel(id: '901', imageUrl: "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?q=80&w=500&auto=format&fit=crop", isPrimary: true),
@@ -328,7 +328,7 @@ final List<ProductModel> mockProducts = [
     description: "Thick, double-brushed cotton flannel plaid shirt. Looks great worn open over basic tees.",
     category: "Shirts",
     brand: "HeritageWeave",
-    gender: Gender.MEN,
+    gender: Gender.MALE,
     price: 29.90,
     images: [
       ProductImageModel(id: '1001', imageUrl: "https://images.unsplash.com/photo-1598033129183-c4f50c736f10?q=80&w=500&auto=format&fit=crop", isPrimary: true),
