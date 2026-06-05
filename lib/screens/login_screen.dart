@@ -1,4 +1,4 @@
-import 'package:clothing_shop/services/api_service.dart';
+import '../services/api_service.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
