@@ -20,17 +20,17 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
-  final _phoneController = TextEditingController(); // 👈 Phone အတွက် ထပ်တိုး
+  final _phoneController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
-  final _otpController = TextEditingController(); // 👈 OTP ရိုက်ဖို့ ထပ်တိုး
+  final _otpController = TextEditingController();
 
   final ApiService _apiService = ApiService();
   File? _imageFile;
   final ImagePicker _picker = ImagePicker();
   
   bool _isLoading = false;
-  bool _isOtpStage = false; // 👈 true ဖြစ်သွားရင် OTP ရိုက်တဲ့ Screen UI ကို ပြောင်းပြမယ်
+  bool _isOtpStage = false; // true ဖြစ်သွားရင် OTP ရိုက်တဲ့ Screen UI ပြောင်းမယ်
 
   @override
   void dispose() {
@@ -57,7 +57,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     }
   }
 
-  // 1️⃣ အဆင့် (၁) - အချက်အလက်တွေ ဖြည့်ပြီး OTP လှမ်းပို့ခိုင်းတဲ့ Function
+  // 📝 အဆင့် (၁) - အချက်အလက်များဖြင့် အကောင့်အရင်ဆောက်ပြီး OTP UI သို့ ကူးပြောင်းခြင်း
   void _submitRegistrationInfo() async {
     final name = _nameController.text.trim();
     final email = _emailController.text.trim();
@@ -78,9 +78,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
     setState(() { _isLoading = true; });
 
     try {
-      // Backend ဆီကို OTP အရင်ပို့ခိုင်းတဲ့ API လှမ်းခေါ်မယ်
-      // (မှတ်ချက် - Shin Thant ရဲ့ backend မှာ /auth/send-otp API ဆောက်ထားရပါမယ်)
-      await _apiService.sendOtp(email: email); 
+      // 🚀 Backend Flow အသစ်အတိုင်း Register တန်းလုပ်လိုက်တာနဲ့ Server က OTP အလိုအလျောက် ပို့ပေးမှာပါ
+      await _apiService.registerUser(
+        name: name,
+        email: email,
+        phone: phone,
+        password: password,
+      ); 
       
       _showSnackBar('မင်းရဲ့ Gmail ထဲကို OTP ဂဏန်း ပို့ပေးလိုက်ပါပြီ');
       
@@ -94,8 +98,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
     }
   }
 
-  // 2️⃣ အဆင့် (၂) - User ရိုက်ထည့်လိုက်တဲ့ OTP ကို စစ်ဆေးပြီး တကယ် အကောင့်ဆောက်မယ့် Function
-void _verifyOtpAndRegister() async {
+  // 🔑 အဆင့် (၂) - ရိုက်ထည့်လိုက်သော OTP ကို တိုက်ရိုက်ပို့စစ်ပြီး ပွဲသိမ်းခြင်း
+  void _verifyOtpAndRegister() async {
     final email = _emailController.text.trim();
     final otp = _otpController.text.trim();
 
@@ -107,21 +111,14 @@ void _verifyOtpAndRegister() async {
     setState(() { _isLoading = true; });
 
     try {
+      // Backend ရဲ့ /auth/verify-otp ဆီ ပို့စစ်တယ်
       bool isOtpValid = await _apiService.verifyOtp(email: email, otp: otp);
 
       if (isOtpValid) {
-      
-        await _apiService.registerUser(
-          name: _nameController.text.trim(),
-          email: email,
-          phone: _phoneController.text.trim(),
-          password: _passwordController.text.trim(),
-          imageFile: _imageFile,
-        );
-
-        widget.onRegisterSuccess();
+        _showSnackBar('အကောင့်ဖွင့်ခြင်း အောင်မြင်ပါသည်');
+        widget.onRegisterSuccess(); // 🎉 ပွဲသိမ်းပြီ! App ထဲ တန်းဝင်ခိုင်းလိုက်မယ်
       } else {
-        _showSnackBar('OTP ဂဏန်း မှားယွင်းနေပါသည်');
+        _showSnackBar('OTP ဂဏန်း မှားယွင်းနေပါသည် သို့မဟုတ် သက်တမ်းကုန်ဆုံးသွားပါပြီ');
       }
     } catch (e) {
       _showSnackBar(e.toString().replaceAll('Exception:', ''));
@@ -143,7 +140,6 @@ void _verifyOtpAndRegister() async {
           padding: const EdgeInsets.all(24.0),
           child: Center(
             child: SingleChildScrollView(
-              // ✨ _isOtpStage ပေါ်မူတည်ပြီး UI မျက်နှာပြင်ကို အလိုအလျောက် ခွဲပြပေးမယ်
               child: _isOtpStage ? _buildOtpUI() : _buildRegistrationFormUI(),
             ),
           ),
@@ -170,7 +166,7 @@ void _verifyOtpAndRegister() async {
         ),
         const SizedBox(height: 24),
 
-        // Profile Image Picker
+        // Profile Image Picker (UI အလှအဖြစ် ခဏထားထားပေးပါတယ်)
         Center(
           child: Stack(
             children: [
@@ -218,7 +214,6 @@ void _verifyOtpAndRegister() async {
         ),
         const SizedBox(height: 16),
 
-        // 📞 Phone Number TextField (အသစ်တိုးထားတာ)
         TextField(
           controller: _phoneController,
           keyboardType: TextInputType.phone,
@@ -296,7 +291,6 @@ void _verifyOtpAndRegister() async {
         ),
         const SizedBox(height: 32),
 
-        // OTP ရိုက်ရမယ့် အကွက်
         TextField(
           controller: _otpController,
           keyboardType: TextInputType.number,
@@ -323,7 +317,6 @@ void _verifyOtpAndRegister() async {
         ),
         const SizedBox(height: 16),
 
-        // ပြန်ပြင်ချင်ရင် နောက်ပြန်ဆုတ်ဖို့ ခလုတ်
         TextButton(
           onPressed: () {
             setState(() { _isOtpStage = false; });
