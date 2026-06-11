@@ -1,3 +1,4 @@
+import 'package:clothing_shop/screens/checkout_success_screen.dart';
 import 'package:clothing_shop/state/cart_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -27,9 +28,12 @@ class CartScreen extends StatelessWidget {
                         itemCount: cartProvider.cartItems.length,
                         itemBuilder: (context, index) {
                           final item = cartProvider.cartItems[index];
-                          
+
                           return Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                            margin: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 8,
+                            ),
                             padding: const EdgeInsets.all(12),
                             decoration: BoxDecoration(
                               color: const Color(0xFFF8F9FA),
@@ -46,24 +50,27 @@ class CartScreen extends StatelessWidget {
                                     height: 70,
                                     fit: BoxFit.cover,
                                     // 💡 ပုံဆွဲနေတုန်း ပြပေးမယ့် Loading Indicator
-                                    loadingBuilder: (context, child, loadingProgress) {
-                                      if (loadingProgress == null) return child;
-                                      return Container(
-                                        width: 70,
-                                        height: 70,
-                                        color: Colors.grey[100],
-                                        child: const Center(
-                                          child: SizedBox(
-                                            width: 16,
-                                            height: 16,
-                                            child: CircularProgressIndicator(
-                                              strokeWidth: 2, 
-                                              color: Color(0xFF1A1A1A),
+                                    loadingBuilder:
+                                        (context, child, loadingProgress) {
+                                          if (loadingProgress == null)
+                                            return child;
+                                          return Container(
+                                            width: 70,
+                                            height: 70,
+                                            color: Colors.grey[100],
+                                            child: const Center(
+                                              child: SizedBox(
+                                                width: 16,
+                                                height: 16,
+                                                child:
+                                                    CircularProgressIndicator(
+                                                      strokeWidth: 2,
+                                                      color: Color(0xFF1A1A1A),
+                                                    ),
+                                              ),
                                             ),
-                                          ),
-                                        ),
-                                      );
-                                    },
+                                          );
+                                        },
                                     // 💡 404 link ဖြစ်ဖြစ်၊ အင်တာနက်ပြတ်လို့ပဲဖြစ်ဖြစ် ပုံမတက်ရင် App မကွဲအောင် ထိန်းပေးမယ့်အပိုင်း
                                     errorBuilder: (context, error, stackTrace) {
                                       return Container(
@@ -71,8 +78,8 @@ class CartScreen extends StatelessWidget {
                                         height: 70,
                                         color: Colors.grey[200],
                                         child: const Icon(
-                                          Icons.broken_image_outlined, 
-                                          color: Colors.grey, 
+                                          Icons.broken_image_outlined,
+                                          color: Colors.grey,
                                           size: 24,
                                         ),
                                       );
@@ -80,27 +87,37 @@ class CartScreen extends StatelessWidget {
                                   ),
                                 ),
                                 const SizedBox(width: 16),
-                                
+
                                 // --- 📝 PRODUCT DETAILS ---
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         item.product.name,
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
-                                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 15,
+                                        ),
                                       ),
                                       const SizedBox(height: 4),
                                       Text(
                                         "Size: ${item.selectedSize}",
-                                        style: const TextStyle(color: Colors.grey, fontSize: 13),
+                                        style: const TextStyle(
+                                          color: Colors.grey,
+                                          fontSize: 13,
+                                        ),
                                       ),
                                       const SizedBox(height: 6),
                                       Text(
                                         "\$${(item.product.price * item.quantity).toStringAsFixed(2)}",
-                                        style: const TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF1A1A1A)),
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Color(0xFF1A1A1A),
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -113,34 +130,61 @@ class CartScreen extends StatelessWidget {
                                     IconButton(
                                       constraints: const BoxConstraints(),
                                       padding: EdgeInsets.zero,
-                                      icon: const Icon(Icons.delete_outline, color: Colors.redAccent, size: 20),
-                                      onPressed: () => cartProvider.removeItem(item.id),
+                                      icon: const Icon(
+                                        Icons.delete_outline,
+                                        color: Colors.redAccent,
+                                        size: 20,
+                                      ),
+                                      onPressed: () =>
+                                          cartProvider.removeItem(item.id),
                                     ),
                                     const SizedBox(height: 12),
-                                    
+
                                     Container(
                                       decoration: BoxDecoration(
                                         color: Colors.white,
                                         borderRadius: BorderRadius.circular(6),
-                                        border: Border.all(color: Colors.grey.shade300),
+                                        border: Border.all(
+                                          color: Colors.grey.shade300,
+                                        ),
                                       ),
                                       child: Row(
                                         children: [
                                           GestureDetector(
-                                            onTap: () => cartProvider.updateQuantity(item.id, item.quantity - 1),
+                                            onTap: () =>
+                                                cartProvider.updateQuantity(
+                                                  item.id,
+                                                  item.quantity - 1,
+                                                ),
                                             child: const Padding(
-                                              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                              child: Icon(Icons.remove, size: 14),
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal: 8,
+                                                vertical: 4,
+                                              ),
+                                              child: Icon(
+                                                Icons.remove,
+                                                size: 14,
+                                              ),
                                             ),
                                           ),
                                           Text(
                                             "${item.quantity}",
-                                            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 13,
+                                            ),
                                           ),
                                           GestureDetector(
-                                            onTap: () => cartProvider.updateQuantity(item.id, item.quantity + 1),
+                                            onTap: () =>
+                                                cartProvider.updateQuantity(
+                                                  item.id,
+                                                  item.quantity + 1,
+                                                ),
                                             child: const Padding(
-                                              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal: 8,
+                                                vertical: 4,
+                                              ),
                                               child: Icon(Icons.add, size: 14),
                                             ),
                                           ),
@@ -148,13 +192,13 @@ class CartScreen extends StatelessWidget {
                                       ),
                                     ),
                                   ],
-                                )
+                                ),
                               ],
                             ),
                           );
                         },
                       ),
-                      
+
                       const SizedBox(height: 20),
                       const Divider(indent: 16, endIndent: 16),
 
@@ -165,19 +209,34 @@ class CartScreen extends StatelessWidget {
                           children: [
                             const Text(
                               "Order Summary",
-                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                             const SizedBox(height: 16),
-                            _buildPriceRow("Subtotal", "\$${cartProvider.subtotalAmount.toStringAsFixed(2)}"),
+                            _buildPriceRow(
+                              "Subtotal",
+                              "\$${cartProvider.subtotalAmount.toStringAsFixed(2)}",
+                            ),
                             const SizedBox(height: 10),
-                            _buildPriceRow("Shipping Fee", cartProvider.shippingFee == 0 ? "Free" : "\$${cartProvider.shippingFee.toStringAsFixed(2)}"),
+                            _buildPriceRow(
+                              "Shipping Fee",
+                              cartProvider.shippingFee == 0
+                                  ? "Free"
+                                  : "\$${cartProvider.shippingFee.toStringAsFixed(2)}",
+                            ),
                             const Padding(
                               padding: EdgeInsets.symmetric(vertical: 12.0),
-                              child: Divider(height: 1, thickness: 1, color: Color(0xFFE0E0E0)),
+                              child: Divider(
+                                height: 1,
+                                thickness: 1,
+                                color: Color(0xFFE0E0E0),
+                              ),
                             ),
                             _buildPriceRow(
-                              "Total Price", 
-                              "\$${cartProvider.totalAmount.toStringAsFixed(2)}", 
+                              "Total Price",
+                              "\$${cartProvider.totalAmount.toStringAsFixed(2)}",
                               isTotal: true,
                             ),
                           ],
@@ -189,41 +248,80 @@ class CartScreen extends StatelessWidget {
               ),
 
               Container(
-                padding: EdgeInsets.fromLTRB(16, 12, 16, MediaQuery.of(context).padding.bottom + 12),
+                padding: EdgeInsets.fromLTRB(
+                  16,
+                  12,
+                  16,
+                  MediaQuery.of(context).padding.bottom + 12,
+                ),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   boxShadow: [
-                    BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: const Offset(0, -4)),
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.05),
+                      blurRadius: 10,
+                      offset: const Offset(0, -4),
+                    ),
                   ],
                 ),
                 child: SizedBox(
                   width: double.infinity,
                   height: 50,
                   child: ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       showDialog(
                         context: context,
-                        builder: (context) => AlertDialog(
-                          title: const Text("Order Placed!"),
-                          content: const Text("Thank you for shopping with Vibe Clothing Shop."),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                cartProvider.clearCart(); 
-                                Navigator.pop(context);
-                              },
-                              child: const Text("OK", style: TextStyle(color: Color(0xFF1A1A1A))),
-                            )
-                          ],
+                        barrierDismissible: false,
+                        builder: (context) => const Center(
+                          child: CircularProgressIndicator(
+                            color: Color(0xFF1A1A1A),
+                          ),
                         ),
                       );
+
+                      final provider = Provider.of<CartProvider>(
+                        context,
+                        listen: false,
+                      );
+                      bool success = await provider.processCheckout();
+
+                      if (context.mounted) {
+                        Navigator.pop(context); // Dismiss loading spinner
+                      }
+
+                      if (success && context.mounted) {
+                        final liveOrderData = provider.lastPlacedOrder;
+                        if (liveOrderData != null) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CheckoutSuccessScreen(
+                                orderData: liveOrderData,
+                              ),
+                            ),
+                          );
+                        }
+                      } else if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              "Failed to process order. Please try again.",
+                            ),
+                            backgroundColor: Colors.redAccent,
+                          ),
+                        );
+                      }
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF1A1A1A), 
+                      backgroundColor: const Color(0xFF1A1A1A),
                     ),
                     child: const Text(
                       "PROCEED TO CHECKOUT",
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, letterSpacing: 1),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                        letterSpacing: 1,
+                      ),
                     ),
                   ),
                 ),
@@ -259,19 +357,23 @@ class CartScreen extends StatelessWidget {
     );
   }
 
-Widget _buildEmptyCart() {
+  Widget _buildEmptyCart() {
     return const Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(Icons.shopping_cart_outlined, size: 64, color: Colors.grey),
-          
+
           // 💡 ဒီနေရာမှာ Sxaxis: ကို ဖြုတ်ပြီး SizedBox ပုံမှန်အတိုင်း ပြန်ပြင်လိုက်ပါပြီ
-          SizedBox(height: 16), 
-          
+          SizedBox(height: 16),
+
           Text(
             "Your cart is empty!",
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.grey),
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.grey,
+            ),
           ),
           SizedBox(height: 6),
           Text(
