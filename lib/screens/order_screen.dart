@@ -1,66 +1,189 @@
 import 'package:flutter/material.dart';
+import '../models/order_model.dart';
+import '../services/api_service.dart';
 
-class OrderScreen extends StatelessWidget {
+class OrderScreen extends StatefulWidget {
   const OrderScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    // Order History Data
-    final List<Map<String, dynamic>> orders = [
-      {'id': '#00124', 'date': '12 May 2026', 'amount': '25,000 MMK', 'status': 'Delivered'},
-      {'id': '#00115', 'date': '05 May 2026', 'amount': '15,000 MMK', 'status': 'Delivered'},
-      {'id': '#00102', 'date': '28 April 2026', 'amount': '45,000 MMK', 'status': 'Pending'},
-    ];
+  State<OrderScreen> createState() => _OrderScreenState();
+}
 
+class _OrderScreenState extends State<OrderScreen> {
+  final ApiService _apiService = ApiService();
+  late Future<List<OrderModel>> _ordersFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _ordersFuture = _apiService.fetchUserOrders();
+  }
+
+  // Helper method to map Prisma OrderStatus enums to UI Colors
+  Color _getStatusColor(String status) {
+    switch (status.toUpperCase()) {
+      case 'PENDING':
+        return Colors.orange;
+      case 'APPROVED':
+        return Colors.blue;
+      case 'COMPLETED':
+        return Colors.green;
+      case 'REJECTED':
+        return Colors.red;
+      default:
+        return Colors.grey;
+    }
+  }
+
+  // Helper method to format DateTime without needing external packages
+  String _formatDate(DateTime date) {
+    const months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
+    return '${date.day.toString().padLeft(2, '0')} ${months[date.month - 1]} ${date.year}';
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text('My Orders', style: TextStyle(fontWeight: FontWeight.bold)),
+        title: const Text(
+          'My Orders',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
         backgroundColor: Colors.transparent,
         elevation: 0,
         foregroundColor: Theme.of(context).primaryColor,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: ListView.builder(
-          itemCount: orders.length,
-          itemBuilder: (context, index) {
-            final order = orders[index];
-            return Card(
-              margin: const EdgeInsets.only(bottom: 15),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-              child: ListTile(
-                contentPadding: const EdgeInsets.all(15),
-                leading: Container(
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor.withOpacity(0.1), 
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Icon(Icons.shopping_bag, color: Theme.of(context).primaryColor),
-                ),
-                title: Text('Order ${order['id']}', style: const TextStyle(fontWeight: FontWeight.bold)),
-                subtitle: Text('Ordered on: ${order['date']}'),
-                trailing: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text(order['amount'], style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).primaryColor)),
-                    const SizedBox(height: 4),
-                    Text(
-                      order['status'],
-                      style: TextStyle(
-                        fontSize: 12, 
-                        fontWeight: FontWeight.bold,
-                        color: order['status'] == 'Pending' ? Colors.orange : Colors.green,
-                      ),
-                    ),
-                  ],
+      body: FutureBuilder<List<OrderModel>>(
+        future: _ordersFuture,
+        builder: (context, snapshot) {
+          // ⏳ Loading State
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(
+                color: Theme.of(context).primaryColor,
+              ),
+            );
+          }
+
+          // ❌ Error State
+          if (snapshot.hasError) {
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Text(
+                  'Error loading orders:\n${snapshot.error}',
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(color: Colors.redAccent),
                 ),
               ),
             );
-          },
-        ),
+          }
+
+          final orders = snapshot.data ?? [];
+
+          // 📭 Empty State
+          if (orders.isEmpty) {
+            return const Center(
+              child: Text(
+                'You have no order history yet.',
+                style: TextStyle(fontSize: 16, color: Colors.grey),
+              ),
+            );
+          }
+
+          // ✅ Success State: Render List
+          return Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: ListView.builder(
+              itemCount: orders.length,
+              itemBuilder: (context, index) {
+                final order = orders[index];
+
+                // Show short ID to keep UI clean (e.g., first 8 characters of CUID)
+                final shortId = order.id.length > 8
+                    ? order.id.substring(0, 8)
+                    : order.id;
+
+                return Card(
+                  margin: const EdgeInsets.only(bottom: 15),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  elevation: 2,
+                  child: ListTile(
+                    contentPadding: const EdgeInsets.all(15),
+                    leading: Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).primaryColor.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Icon(
+                        Icons.shopping_bag,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                    ),
+                    title: Text(
+                      'Order #$shortId',
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: Text(
+                      'Ordered on: ${_formatDate(order.createdAt)}',
+                    ),
+                    trailing: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          '\$${order.totalAmount.toStringAsFixed(2)}',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).primaryColor,
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 4,
+                          ),
+                          decoration: BoxDecoration(
+                            color: _getStatusColor(
+                              order.status,
+                            ).withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: Text(
+                            order.status.toUpperCase(),
+                            style: TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                              color: _getStatusColor(order.status),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          );
+        },
       ),
     );
   }

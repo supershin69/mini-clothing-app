@@ -4,8 +4,10 @@ import 'package:clothing_shop/screens/home_screen.dart';
 import 'package:clothing_shop/screens/login_screen.dart';
 import 'package:clothing_shop/screens/profile_screen.dart';
 import 'package:clothing_shop/screens/signup_screen.dart';
+import 'package:clothing_shop/state/navigation_provider.dart'; // ✅ Import
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:provider/provider.dart';
 
 class MainWrapper extends StatefulWidget {
   const MainWrapper({super.key});
@@ -15,9 +17,8 @@ class MainWrapper extends StatefulWidget {
 }
 
 class _MainWrapperState extends State<MainWrapper> {
-  int _currentIndex = 0;
   bool _isLoggedIn = false;
-  bool _showRegister = false; // ✅ Login နှင့် Register အကူးအပြောင်းကို ထိန်းချုပ်မည့် State
+  bool _showRegister = false;
   final _storage = const FlutterSecureStorage();
 
   @override
@@ -35,15 +36,16 @@ class _MainWrapperState extends State<MainWrapper> {
 
   @override
   Widget build(BuildContext context) {
+    final navigationProvider = context
+        .watch<NavigationProvider>(); // ✅ Watch state
     Widget profileTab;
 
-    // 💡 Auth Flow Widget သုံးဆင့် ခွဲခြားခြင်း
     if (_isLoggedIn) {
       profileTab = ProfileScreen(
         onLogoutSuccess: () {
           setState(() {
             _isLoggedIn = false;
-            _showRegister = false; // Logout ဖြစ်ရင် Login ကနေ ပြန်စမယ်
+            _showRegister = false;
           });
         },
       );
@@ -51,12 +53,12 @@ class _MainWrapperState extends State<MainWrapper> {
       profileTab = RegisterScreen(
         onRegisterSuccess: () {
           setState(() {
-            _isLoggedIn = true; // Register အောင်မြင်ရင် Profile တန်းပြမယ်
+            _isLoggedIn = true;
           });
         },
         onBackToLogin: () {
           setState(() {
-            _showRegister = false; // Login screen ဘက် ပြန်လှည့်မယ်
+            _showRegister = false;
           });
         },
       );
@@ -64,12 +66,12 @@ class _MainWrapperState extends State<MainWrapper> {
       profileTab = LoginScreen(
         onLoginSuccess: () {
           setState(() {
-            _isLoggedIn = true; // Login အောင်မြင်ရင် Profile ပြမယ်
+            _isLoggedIn = true;
           });
         },
         onGoToRegister: () {
           setState(() {
-            _showRegister = true; // Register screen ဘက် သွားမယ်
+            _showRegister = true;
           });
         },
       );
@@ -79,27 +81,38 @@ class _MainWrapperState extends State<MainWrapper> {
       const HomeScreen(),
       const ClothingScreen(),
       const CartScreen(),
-      profileTab, // ✅ Dynamic Layout Wrapper သုံးထားလို့ Bottom Nav က ပျောက်မသွားပါဘူး
+      profileTab,
     ];
 
     return Scaffold(
-        appBar: AppBar(
-            title: const Text('Clothing Shop', style: TextStyle(fontWeight: FontWeight.bold))),
-        body: screens[_currentIndex],
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: _currentIndex,
-          type: BottomNavigationBarType.fixed,
-          onTap: (index) {
-            setState(() {
-              _currentIndex = index;
-            });
-          },
-          items: const [
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-            BottomNavigationBarItem(icon: Icon(Icons.shopping_bag), label: 'Clothing'),
-            BottomNavigationBarItem(icon: Icon(Icons.shopping_cart), label: 'Cart'),
-            BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-          ],
-        ));
+      appBar: AppBar(
+        title: const Text(
+          'Clothing Shop',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+      ),
+      body:
+          screens[navigationProvider
+              .currentIndex], // ✅ Dynamic index via provider
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: navigationProvider.currentIndex,
+        type: BottomNavigationBarType.fixed,
+        onTap: (index) {
+          navigationProvider.changeTab(index); // ✅ Change tab via provider
+        },
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_bag),
+            label: 'Clothing',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_cart),
+            label: 'Cart',
+          ),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+        ],
+      ),
+    );
   }
 }

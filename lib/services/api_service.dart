@@ -1,4 +1,5 @@
 import 'package:clothing_shop/models/auth_models.dart';
+import 'package:clothing_shop/models/order_model.dart';
 import 'package:clothing_shop/models/product_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -34,8 +35,8 @@ class ApiService {
             await _storage.delete(key: 'auth_token');
           }
           return handler.next(e);
-        }
-      )
+        },
+      ),
     );
   }
 
@@ -48,12 +49,15 @@ class ApiService {
   }) async {
     try {
       // Backend ရဲ့ RegisterDto တောင်းဆိုချက်အတိုင်း JSON data ပို့ပေးခြင်း
-      final response = await _dio.post('/auth/register', data: {
-        'name': name,
-        'email': email,
-        'phone_no': phone,
-        'password': password,
-      });
+      final response = await _dio.post(
+        '/auth/register',
+        data: {
+          'name': name,
+          'email': email,
+          'phone_no': phone,
+          'password': password,
+        },
+      );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         print("✅ Register Success: OTP sent to email automatically.");
@@ -72,10 +76,10 @@ class ApiService {
   // 🔑 ၂။ Verify OTP API (ရိုက်ထည့်လိုက်သော OTP ဂဏန်း ၆ လုံးကို စစ်ဆေးသည်)
   Future<bool> verifyOtp({required String email, required String otp}) async {
     try {
-      final response = await _dio.post('/auth/verify-otp', data: {
-        'email': email,
-        'code': otp,
-      });
+      final response = await _dio.post(
+        '/auth/verify-otp',
+        data: {'email': email, 'code': otp},
+      );
       return response.statusCode == 200 || response.statusCode == 201;
     } catch (e) {
       print("❌ verifyOtp Error: $e");
@@ -89,15 +93,18 @@ class ApiService {
     required String password,
   }) async {
     try {
-      final response = await _dio.post('/auth/login', data: {
-        'email': email,
-        'password': password,
-      });
+      final response = await _dio.post(
+        '/auth/login',
+        data: {'email': email, 'password': password},
+      );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         final data = response.data;
         final authResponse = AuthResponseModel.fromJson(data);
-        await _storage.write(key: 'auth_token', value: authResponse.accessToken);
+        await _storage.write(
+          key: 'auth_token',
+          value: authResponse.accessToken,
+        );
         return authResponse;
       } else {
         throw Exception('Failed to login user');
@@ -147,6 +154,56 @@ class ApiService {
     } on DioException catch (e) {
       print("❌ Dio Error Response: ${e.response?.data}");
       throw Exception('Dio error: ${e.message}');
+    } catch (e) {
+      throw Exception('Unexpected error: $e');
+    }
+  }
+
+  // 🛒 ၇။ Create Order (Checkout) API
+  Future<Map<String, dynamic>> createOrder({
+    required double totalAmount,
+    required List<Map<String, dynamic>> orderLines,
+  }) async {
+    try {
+      // Backend handles user identification via the Authorization Bearer Token
+      final response = await _dio.post(
+        '/orders',
+        data: {
+          //! Just replace with actual endpoint bruh
+          'total_amount': totalAmount,
+          'order_lines': orderLines, // Array of { variant_id, quantity, price }
+        },
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        print("✅ Order Placed Successfully on Backend.");
+        return response.data as Map<String, dynamic>;
+      } else {
+        throw Exception('Failed to place order');
+      }
+    } on DioException catch (e) {
+      print("❌ Dio Error Response: ${e.response?.data}");
+      throw Exception(e.response?.data['message'] ?? 'Dio error: ${e.message}');
+    } catch (e) {
+      throw Exception('Unexpected error: $e');
+    }
+  }
+
+  // 📦 ၈။ Fetch User Orders API
+  Future<List<OrderModel>> fetchUserOrders() async {
+    try {
+      // The backend should know which user to fetch orders for based on the Bearer Token
+      final response = await _dio.get('/orders');
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = response.data;
+        return data.map((item) => OrderModel.fromJson(item)).toList();
+      } else {
+        throw Exception('Failed to load orders');
+      }
+    } on DioException catch (e) {
+      print("❌ Dio Error Response: ${e.response?.data}");
+      throw Exception(e.response?.data['message'] ?? 'Dio error: ${e.message}');
     } catch (e) {
       throw Exception('Unexpected error: $e');
     }
