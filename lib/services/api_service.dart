@@ -8,16 +8,17 @@ class ApiService {
   final Dio _dio = Dio();
   final _storage = const FlutterSecureStorage();
 
-  final String baseUrl = 'https://anthology-trombone-knelt.ngrok-free.dev';
+  final String baseUrl = 'https://itchy-moose-unite.loca.lt';
 
   ApiService() {
     _dio.options.baseUrl = baseUrl;
-    _dio.options.connectTimeout = const Duration(seconds: 10);
-    _dio.options.receiveTimeout = const Duration(seconds: 10);
+    _dio.options.connectTimeout = const Duration(seconds: 50);
+    _dio.options.receiveTimeout = const Duration(seconds: 50);
 
     _dio.options.headers = {
       'Content-Type': 'application/json',
-      'ngrok-skip-browser-warning': 'true',
+      //!'ngrok-skip-browser-warning': 'true',
+      //!'bypass-tunnel-reminder': 'true',
     };
 
     _dio.interceptors.add(
@@ -159,21 +160,13 @@ class ApiService {
     }
   }
 
-  // 🛒 ၇။ Create Order (Checkout) API
+  // 🛒 ၇။ Create Order (Checkout) API - Updated for the new JSON schema
   Future<Map<String, dynamic>> createOrder({
-    required double totalAmount,
-    required List<Map<String, dynamic>> orderLines,
+    required List<Map<String, dynamic>> items,
   }) async {
     try {
-      // Backend handles user identification via the Authorization Bearer Token
-      final response = await _dio.post(
-        '/orders',
-        data: {
-          //! Just replace with actual endpoint bruh
-          'total_amount': totalAmount,
-          'order_lines': orderLines, // Array of { variant_id, quantity, price }
-        },
-      );
+      // Constructs exactly: { "items": [ { "variant_id": "...", "quantity": 1 } ] }
+      final response = await _dio.post('/orders', data: {'items': items});
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         print("✅ Order Placed Successfully on Backend.");
@@ -193,7 +186,7 @@ class ApiService {
   Future<List<OrderModel>> fetchUserOrders() async {
     try {
       // The backend should know which user to fetch orders for based on the Bearer Token
-      final response = await _dio.get('/orders');
+      final response = await _dio.get('/orders/me');
 
       if (response.statusCode == 200) {
         final List<dynamic> data = response.data;

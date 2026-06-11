@@ -40,13 +40,13 @@ class CartProvider with ChangeNotifier {
 
   double get totalAmount => subtotalAmount + shippingFee;
 
-  // 🚀 Live Checkout Backend Integration Method
+  // 🚀 Live Checkout Backend Integration Method - Updated
   Future<bool> processCheckout() async {
     if (_cartItems.isEmpty) return false;
 
     try {
-      // 1. Map your internal frontend cart map structure to the backend OrderLine schema format
-      final List<Map<String, dynamic>> targetLines = _cartItems.values.map((
+      // 1. Map frontend cart items into the exact array required by the backend
+      final List<Map<String, dynamic>> targetItems = _cartItems.values.map((
         item,
       ) {
         // Find the variant UUID/CUID matching the user's chosen size
@@ -56,18 +56,13 @@ class CartProvider with ChangeNotifier {
         );
 
         return {
-          'variant_id': matchedVariant
-              .id, // Maps directly to backend foreign key relation
-          'quantity': item.quantity,
-          'price': item.product.price,
+          'variant_id': matchedVariant.id, // Must match "variant_id" key
+          'quantity': item.quantity, // Must match "quantity" key
         };
       }).toList();
 
-      // 2. Post the structured payload via your Dio ApiService instance
-      final responseData = await _apiService.createOrder(
-        totalAmount: totalAmount,
-        orderLines: targetLines,
-      );
+      // 2. Send only the targetItems list to the updated ApiService
+      final responseData = await _apiService.createOrder(items: targetItems);
 
       // 3. Keep a backup of the backend's response object structure for the Success Page layout
       _lastPlacedOrder = responseData;
