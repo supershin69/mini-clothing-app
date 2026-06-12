@@ -8,7 +8,7 @@ class ApiService {
   final Dio _dio = Dio();
   final _storage = const FlutterSecureStorage();
 
-  final String baseUrl = 'https://itchy-moose-unite.loca.lt';
+  final String baseUrl = 'https://clothing-store-api-vt3r.onrender.com';
 
   ApiService() {
     _dio.options.baseUrl = baseUrl;
