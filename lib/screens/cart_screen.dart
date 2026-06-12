@@ -1,5 +1,6 @@
 import 'package:clothing_shop/screens/checkout_success_screen.dart';
 import 'package:clothing_shop/state/cart_provider.dart';
+import 'package:clothing_shop/models/order_model.dart'; // 💡 OrderModel Type ကို သေချာသိအောင် တစ်ခါတည်း import ထည့်ထားပေးပါတယ်
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -49,7 +50,6 @@ class CartScreen extends StatelessWidget {
                                     width: 70,
                                     height: 70,
                                     fit: BoxFit.cover,
-                                    // 💡 ပုံဆွဲနေတုန်း ပြပေးမယ့် Loading Indicator
                                     loadingBuilder:
                                         (context, child, loadingProgress) {
                                           if (loadingProgress == null)
@@ -71,7 +71,6 @@ class CartScreen extends StatelessWidget {
                                             ),
                                           );
                                         },
-                                    // 💡 404 link ဖြစ်ဖြစ်၊ အင်တာနက်ပြတ်လို့ပဲဖြစ်ဖြစ် ပုံမတက်ရင် App မကွဲအောင် ထိန်းပေးမယ့်အပိုင်း
                                     errorBuilder: (context, error, stackTrace) {
                                       return Container(
                                         width: 70,
@@ -290,13 +289,17 @@ class CartScreen extends StatelessWidget {
                       }
 
                       if (success && context.mounted) {
-                        final liveOrderData = provider.lastPlacedOrder;
+                        // 💡 liveOrderData ရဲ့ Type ကို OrderModel ဖြစ်ကြောင်း သေချာအောင် သတ်မှတ်ပေးလိုက်ပါတယ်
+                        final OrderModel? liveOrderData =
+                            provider.lastPlacedOrder;
+
                         if (liveOrderData != null) {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => CheckoutSuccessScreen(
-                                orderData: liveOrderData,
+                                orderData:
+                                    liveOrderData, // 🚀 အောင်မြင်စွာ ပါးလိုက်ပါပြီ
                               ),
                             ),
                           );
@@ -363,10 +366,7 @@ class CartScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(Icons.shopping_cart_outlined, size: 64, color: Colors.grey),
-
-          // 💡 ဒီနေရာမှာ Sxaxis: ကို ဖြုတ်ပြီး SizedBox ပုံမှန်အတိုင်း ပြန်ပြင်လိုက်ပါပြီ
           SizedBox(height: 16),
-
           Text(
             "Your cart is empty!",
             style: TextStyle(
