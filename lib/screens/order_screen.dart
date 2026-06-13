@@ -87,7 +87,7 @@ class _OrderScreenState extends State<OrderScreen> {
                 child: Text(
                   'Error loading orders:\n${snapshot.error}',
                   textAlign: TextAlign.center,
-                  style: const TextStyle(color: Colors.redAccent),
+                  style: TextStyle(color: Theme.of(context).colorScheme.error),
                 ),
               ),
             );
@@ -97,10 +97,13 @@ class _OrderScreenState extends State<OrderScreen> {
 
           // 📭 Empty State
           if (orders.isEmpty) {
-            return const Center(
+            return Center(
               child: Text(
                 'You have no order history yet.',
-                style: TextStyle(fontSize: 16, color: Colors.grey),
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Theme.of(context).disabledColor,
+                ),
               ),
             );
           }

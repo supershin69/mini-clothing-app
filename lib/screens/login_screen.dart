@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
   final VoidCallback onLoginSuccess;
-  final VoidCallback onGoToRegister; // ✅ Register ဘက်ကူးဖို့ အကြောင်းကြားမည့် Callback
+  final VoidCallback
+  onGoToRegister; // ✅ Register ဘက်ကူးဖို့ အကြောင်းကြားမည့် Callback
 
   const LoginScreen({
-    super.key, 
-    required this.onLoginSuccess, 
+    super.key,
+    required this.onLoginSuccess,
     required this.onGoToRegister, // ✅ Constructor ထဲထည့်ပေးပါ
   });
 
@@ -31,7 +32,9 @@ class _LoginScreenState extends State<LoginScreen> {
   void _handleLogin() async {
     if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('ကျေးဇူးပြု၍ အချက်အလက်များ အပြည့်အစုံဖြည့်ပါ')),
+        const SnackBar(
+          content: Text('ကျေးဇူးပြု၍ အချက်အလက်များ အပြည့်အစုံဖြည့်ပါ'),
+        ),
       );
       return;
     }
@@ -70,38 +73,59 @@ class _LoginScreenState extends State<LoginScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Icon(Icons.shopping_bag_outlined, size: 100, color: Theme.of(context).primaryColor),
+                  Icon(
+                    Icons.shopping_bag_outlined,
+                    size: 100,
+                    color: Theme.of(context).primaryColor,
+                  ),
                   const SizedBox(height: 16),
                   Text(
                     'Welcome Back',
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Theme.of(context).primaryColor),
+                    style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).primaryColor,
+                    ),
                   ),
-                  const Text(
+                  Text(
                     'Sign in to your clothing account',
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 14, color: Colors.grey),
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Theme.of(context).disabledColor,
+                    ),
                   ),
                   const SizedBox(height: 32),
-                  
+
                   TextField(
                     controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
                       labelText: 'Email Address',
-                      prefixIcon: const Icon(Icons.email_outlined),
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                      prefixIcon: Icon(
+                        Icons.email_outlined,
+                        color: Theme.of(context).disabledColor,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
                   ),
                   const SizedBox(height: 16),
-                  
+
                   TextField(
                     controller: _passwordController,
                     obscureText: true,
                     decoration: InputDecoration(
                       labelText: 'Password',
-                      prefixIcon: const Icon(Icons.lock_outline),
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                      prefixIcon: Icon(
+                        Icons.lock_outline,
+                        color: Theme.of(context).disabledColor,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
                   ),
                   const SizedBox(height: 24),
@@ -112,21 +136,35 @@ class _LoginScreenState extends State<LoginScreen> {
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       backgroundColor: Theme.of(context).primaryColor,
                       foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
-                    child: _isLoading 
-                        ? const SizedBox(
-                            height: 20, 
-                            width: 20, 
-                            child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2)
+                    child: _isLoading
+                        ? SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(
+                              color: Theme.of(context).colorScheme.onPrimary,
+                              strokeWidth: 2,
+                            ),
                           )
-                        : const Text('Login', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                        : const Text(
+                            'Login',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                   ),
                   const SizedBox(height: 16),
-                  
+
                   TextButton(
-                    onPressed: widget.onGoToRegister, // ✅ Navigator သုံးမယ့်အစား Callback ကို ခေါ်လိုက်တာပါ
-                    style: TextButton.styleFrom(foregroundColor: Theme.of(context).primaryColor),
+                    onPressed: widget
+                        .onGoToRegister, // ✅ Navigator သုံးမယ့်အစား Callback ကို ခေါ်လိုက်တာပါ
+                    style: TextButton.styleFrom(
+                      foregroundColor: Theme.of(context).primaryColor,
+                    ),
                     child: const Text('Don\'t have an account? Register here'),
                   ),
                 ],

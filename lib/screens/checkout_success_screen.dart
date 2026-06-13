@@ -1,18 +1,20 @@
 import 'package:clothing_shop/state/navigation_provider.dart';
+import 'package:clothing_shop/models/order_model.dart'; // 💡 သေချာ import လုပ်ထားပါ
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CheckoutSuccessScreen extends StatelessWidget {
-  final Map<String, dynamic> orderData;
+  final OrderModel orderData; // 💡 OrderModel ကို တိုက်ရိုက် လက်ခံထားပါတယ်
 
   const CheckoutSuccessScreen({super.key, required this.orderData});
 
   @override
   Widget build(BuildContext context) {
-    final List<dynamic> lines = orderData['order_lines'] ?? [];
+    final List<OrderLineModel> lines =
+        orderData.orderLines; // 💡 ကွက်တိ Type မိသွားပါပြီ
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -25,29 +27,31 @@ class CheckoutSuccessScreen extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFE5D3B3).withOpacity(0.3),
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.secondary.withOpacity(0.3),
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.check_circle,
                   size: 72,
-                  color: Color(0xFF1A1A1A),
+                  color: Theme.of(context).primaryColor,
                 ),
               ),
               const SizedBox(height: 24),
-              const Text(
+              Text(
                 "Order Placed Successfully!",
                 style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF1A1A1A),
+                  color: Theme.of(context).primaryColor,
                 ),
               ),
               const SizedBox(height: 8),
               Text(
-                "Order ID: ${orderData['id']}",
-                style: const TextStyle(
-                  color: Colors.grey,
+                "Order ID: ${orderData.id}",
+                style: TextStyle(
+                  color: Theme.of(context).disabledColor,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -61,7 +65,9 @@ class CheckoutSuccessScreen extends StatelessWidget {
                 child: ListView.builder(
                   itemCount: lines.length,
                   itemBuilder: (context, index) {
-                    final line = lines[index];
+                    final line =
+                        lines[index]; // 💡 line သည် OrderLineModel ဖြစ်သွားပါပြီ
+
                     return Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: Row(
@@ -72,7 +78,7 @@ class CheckoutSuccessScreen extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  line['product_name'],
+                                  line.productName, // 💡 Model ထဲကနေ တိုက်ရိုက်ဆွဲထုတ်ခေါ်ယူခြင်း
                                   style: const TextStyle(
                                     fontWeight: FontWeight.w600,
                                     fontSize: 14,
@@ -82,7 +88,7 @@ class CheckoutSuccessScreen extends StatelessWidget {
                                 ),
                                 const SizedBox(height: 2),
                                 Text(
-                                  "Size: ${line['selected_size']}  x${line['quantity']}",
+                                  "Size: ${line.selectedSize}  x${line.quantity}",
                                   style: const TextStyle(
                                     color: Colors.grey,
                                     fontSize: 12,
@@ -92,7 +98,7 @@ class CheckoutSuccessScreen extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            "\$${(line['price'] * line['quantity']).toStringAsFixed(2)}",
+                            "\$${(line.price * line.quantity).toStringAsFixed(2)}",
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 14,
@@ -119,11 +125,11 @@ class CheckoutSuccessScreen extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      "\$${orderData['total_amount'].toStringAsFixed(2)}",
-                      style: const TextStyle(
+                      "\$${orderData.totalAmount.toStringAsFixed(2)}", // 💡 .totalAmount ကို တိုက်ရိုက်ခေါ်ခြင်း
+                      style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 20,
-                        color: Color(0xFF1A1A1A),
+                        color: Theme.of(context).primaryColor,
                       ),
                     ),
                   ],
@@ -138,16 +144,14 @@ class CheckoutSuccessScreen extends StatelessWidget {
                 height: 50,
                 child: ElevatedButton(
                   onPressed: () {
-                    // 1. Tab state ကို Home Screen (Index 0) သို့ ပြောင်းမယ်
                     Provider.of<NavigationProvider>(
                       context,
                       listen: false,
                     ).changeTab(0);
-                    // 2. Stack တစ်ခုလုံးကို MainWrapper (First Route) ဆီ ပြန်ဆွဲချမယ်
                     Navigator.popUntil(context, (route) => route.isFirst);
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF1A1A1A),
+                    backgroundColor: Theme.of(context).primaryColor,
                   ),
                   child: const Text(
                     "RETURN TO HOME",

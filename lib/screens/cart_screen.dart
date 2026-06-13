@@ -1,5 +1,6 @@
 import 'package:clothing_shop/screens/checkout_success_screen.dart';
 import 'package:clothing_shop/state/cart_provider.dart';
+import 'package:clothing_shop/models/order_model.dart'; // 💡 OrderModel Type ကို သေချာသိအောင် တစ်ခါတည်း import ထည့်ထားပေးပါတယ်
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -9,11 +10,11 @@ class CartScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Consumer<CartProvider>(
         builder: (context, cartProvider, child) {
           if (cartProvider.cartItems.isEmpty) {
-            return _buildEmptyCart();
+            return _buildEmptyCart(context); // Passed context here
           }
 
           return Column(
@@ -36,7 +37,7 @@ class CartScreen extends StatelessWidget {
                             ),
                             padding: const EdgeInsets.all(12),
                             decoration: BoxDecoration(
-                              color: const Color(0xFFF8F9FA),
+                              color: Theme.of(context).colorScheme.surface,
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Row(
@@ -49,7 +50,6 @@ class CartScreen extends StatelessWidget {
                                     width: 70,
                                     height: 70,
                                     fit: BoxFit.cover,
-                                    // 💡 ပုံဆွဲနေတုန်း ပြပေးမယ့် Loading Indicator
                                     loadingBuilder:
                                         (context, child, loadingProgress) {
                                           if (loadingProgress == null)
@@ -57,29 +57,36 @@ class CartScreen extends StatelessWidget {
                                           return Container(
                                             width: 70,
                                             height: 70,
-                                            color: Colors.grey[100],
-                                            child: const Center(
+                                            color: Theme.of(
+                                              context,
+                                            ).inputDecorationTheme.fillColor,
+                                            child: Center(
                                               child: SizedBox(
                                                 width: 16,
                                                 height: 16,
                                                 child:
                                                     CircularProgressIndicator(
                                                       strokeWidth: 2,
-                                                      color: Color(0xFF1A1A1A),
+                                                      color: Theme.of(
+                                                        context,
+                                                      ).primaryColor,
                                                     ),
                                               ),
                                             ),
                                           );
                                         },
-                                    // 💡 404 link ဖြစ်ဖြစ်၊ အင်တာနက်ပြတ်လို့ပဲဖြစ်ဖြစ် ပုံမတက်ရင် App မကွဲအောင် ထိန်းပေးမယ့်အပိုင်း
                                     errorBuilder: (context, error, stackTrace) {
                                       return Container(
                                         width: 70,
                                         height: 70,
-                                        color: Colors.grey[200],
-                                        child: const Icon(
+                                        color: Theme.of(
+                                          context,
+                                        ).inputDecorationTheme.fillColor,
+                                        child: Icon(
                                           Icons.broken_image_outlined,
-                                          color: Colors.grey,
+                                          color: Theme.of(
+                                            context,
+                                          ).disabledColor,
                                           size: 24,
                                         ),
                                       );
@@ -106,17 +113,19 @@ class CartScreen extends StatelessWidget {
                                       const SizedBox(height: 4),
                                       Text(
                                         "Size: ${item.selectedSize}",
-                                        style: const TextStyle(
-                                          color: Colors.grey,
+                                        style: TextStyle(
+                                          color: Theme.of(
+                                            context,
+                                          ).disabledColor,
                                           fontSize: 13,
                                         ),
                                       ),
                                       const SizedBox(height: 6),
                                       Text(
                                         "\$${(item.product.price * item.quantity).toStringAsFixed(2)}",
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          color: Color(0xFF1A1A1A),
+                                          color: Theme.of(context).primaryColor,
                                         ),
                                       ),
                                     ],
@@ -130,22 +139,25 @@ class CartScreen extends StatelessWidget {
                                     IconButton(
                                       constraints: const BoxConstraints(),
                                       padding: EdgeInsets.zero,
-                                      icon: const Icon(
+                                      icon: Icon(
                                         Icons.delete_outline,
-                                        color: Colors.redAccent,
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.error,
                                         size: 20,
                                       ),
                                       onPressed: () =>
                                           cartProvider.removeItem(item.id),
                                     ),
                                     const SizedBox(height: 12),
-
                                     Container(
                                       decoration: BoxDecoration(
-                                        color: Colors.white,
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.surface,
                                         borderRadius: BorderRadius.circular(6),
                                         border: Border.all(
-                                          color: Colors.grey.shade300,
+                                          color: Theme.of(context).dividerColor,
                                         ),
                                       ),
                                       child: Row(
@@ -198,10 +210,8 @@ class CartScreen extends StatelessWidget {
                           );
                         },
                       ),
-
                       const SizedBox(height: 20),
                       const Divider(indent: 16, endIndent: 16),
-
                       Padding(
                         padding: const EdgeInsets.all(20.0),
                         child: Column(
@@ -215,26 +225,32 @@ class CartScreen extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(height: 16),
+                            // Passed context to helper methods
                             _buildPriceRow(
+                              context,
                               "Subtotal",
                               "\$${cartProvider.subtotalAmount.toStringAsFixed(2)}",
                             ),
                             const SizedBox(height: 10),
                             _buildPriceRow(
+                              context,
                               "Shipping Fee",
                               cartProvider.shippingFee == 0
                                   ? "Free"
                                   : "\$${cartProvider.shippingFee.toStringAsFixed(2)}",
                             ),
-                            const Padding(
-                              padding: EdgeInsets.symmetric(vertical: 12.0),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 12.0,
+                              ),
                               child: Divider(
                                 height: 1,
                                 thickness: 1,
-                                color: Color(0xFFE0E0E0),
+                                color: Theme.of(context).dividerColor,
                               ),
                             ),
                             _buildPriceRow(
+                              context,
                               "Total Price",
                               "\$${cartProvider.totalAmount.toStringAsFixed(2)}",
                               isTotal: true,
@@ -247,6 +263,7 @@ class CartScreen extends StatelessWidget {
                 ),
               ),
 
+              // --- 🛒 CHECKOUT BUTTON SECTION ---
               Container(
                 padding: EdgeInsets.fromLTRB(
                   16,
@@ -255,7 +272,7 @@ class CartScreen extends StatelessWidget {
                   MediaQuery.of(context).padding.bottom + 12,
                 ),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Theme.of(context).colorScheme.surface,
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withOpacity(0.05),
@@ -290,13 +307,17 @@ class CartScreen extends StatelessWidget {
                       }
 
                       if (success && context.mounted) {
-                        final liveOrderData = provider.lastPlacedOrder;
+                        // 💡 liveOrderData ရဲ့ Type ကို OrderModel ဖြစ်ကြောင်း သေချာအောင် သတ်မှတ်ပေးလိုက်ပါတယ်
+                        final OrderModel? liveOrderData =
+                            provider.lastPlacedOrder;
+
                         if (liveOrderData != null) {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => CheckoutSuccessScreen(
-                                orderData: liveOrderData,
+                                orderData:
+                                    liveOrderData, // 🚀 အောင်မြင်စွာ ပါးလိုက်ပါပြီ
                               ),
                             ),
                           );
@@ -313,7 +334,7 @@ class CartScreen extends StatelessWidget {
                       }
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF1A1A1A),
+                      backgroundColor: Theme.of(context).primaryColor,
                     ),
                     child: const Text(
                       "PROCEED TO CHECKOUT",
@@ -333,7 +354,13 @@ class CartScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildPriceRow(String label, String value, {bool isTotal = false}) {
+  // Required 'BuildContext context' parameter added here
+  Widget _buildPriceRow(
+    BuildContext context,
+    String label,
+    String value, {
+    bool isTotal = false,
+  }) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -342,7 +369,9 @@ class CartScreen extends StatelessWidget {
           style: TextStyle(
             fontSize: isTotal ? 16 : 14,
             fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
-            color: isTotal ? const Color(0xFF1A1A1A) : Colors.grey[600],
+            color: isTotal
+                ? Theme.of(context).primaryColor
+                : Theme.of(context).disabledColor,
           ),
         ),
         Text(
@@ -350,35 +379,39 @@ class CartScreen extends StatelessWidget {
           style: TextStyle(
             fontSize: isTotal ? 18 : 14,
             fontWeight: FontWeight.bold,
-            color: isTotal ? const Color(0xFF1A1A1A) : Colors.black,
+            color: isTotal
+                ? Theme.of(context).primaryColor
+                : Theme.of(context).colorScheme.onSurface,
           ),
         ),
       ],
     );
   }
 
-  Widget _buildEmptyCart() {
-    return const Center(
+  // Required 'BuildContext context' parameter added here
+  Widget _buildEmptyCart(BuildContext context) {
+    return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.shopping_cart_outlined, size: 64, color: Colors.grey),
-
-          // 💡 ဒီနေရာမှာ Sxaxis: ကို ဖြုတ်ပြီး SizedBox ပုံမှန်အတိုင်း ပြန်ပြင်လိုက်ပါပြီ
-          SizedBox(height: 16),
-
+          Icon(
+            Icons.shopping_cart_outlined,
+            size: 64,
+            color: Theme.of(context).disabledColor,
+          ),
+          const SizedBox(height: 16),
           Text(
             "Your cart is empty!",
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: Colors.grey,
+              color: Theme.of(context).disabledColor,
             ),
           ),
-          SizedBox(height: 6),
+          const SizedBox(height: 6),
           Text(
             "Add some items to get started.",
-            style: TextStyle(color: Colors.grey),
+            style: TextStyle(color: Theme.of(context).disabledColor),
           ),
         ],
       ),

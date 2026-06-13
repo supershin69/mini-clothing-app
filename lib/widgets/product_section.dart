@@ -1,4 +1,4 @@
-import 'dart:math'; 
+import 'dart:math';
 import 'package:clothing_shop/screens/product_detail.dart';
 import 'package:flutter/material.dart';
 import '../models/product_model.dart';
@@ -23,38 +23,34 @@ class ProductSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
           child: Text(
             title,
-            style: const TextStyle(
-              fontSize: 18, 
-              fontWeight: FontWeight.bold, 
-              color: Color(0xFF1A1A1A),
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).primaryColor,
             ),
           ),
         ),
-
-        
         SizedBox(
           height: 250,
           child: ListView.builder(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             scrollDirection: Axis.horizontal,
-            itemCount: displayCount + 1, 
+            itemCount: displayCount + 1,
             itemBuilder: (context, index) {
               if (index == displayCount) {
-                return _buildExploreMoreCard();
+                // Passed context here
+                return _buildExploreMoreCard(context);
               }
 
               final product = products[index];
-              
-              
+
               return ClothingCard(
                 product: product,
                 onTap: () {
-                  
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -70,33 +66,39 @@ class ProductSection extends StatelessWidget {
     );
   }
 
-  
-  Widget _buildExploreMoreCard() {
+  // Added BuildContext as a parameter
+  Widget _buildExploreMoreCard(BuildContext context) {
     return GestureDetector(
       onTap: onSeeAllTap,
       child: Container(
         width: 140,
         margin: const EdgeInsets.all(8.0),
         decoration: BoxDecoration(
-          color: const Color(0xFFF5F5F5),
+          color: Theme.of(context).inputDecorationTheme.fillColor,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.grey.withOpacity(0.2)),
+          border: Border.all(
+            color: Theme.of(context).dividerColor.withOpacity(0.2),
+          ),
         ),
-        child: const Column(
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CircleAvatar(
-              backgroundColor: Color(0xFF1A1A1A),
+              backgroundColor: Theme.of(context).primaryColor,
               radius: 24,
-              child: Icon(Icons.arrow_forward, color: Colors.white, size: 24),
+              child: Icon(
+                Icons.arrow_forward,
+                color: Theme.of(context).colorScheme.onPrimary,
+                size: 24,
+              ),
             ),
-            SizedBox(height: 12),
+            const SizedBox(height: 12),
             Text(
               "See All",
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF1A1A1A),
+                color: Theme.of(context).primaryColor,
               ),
             ),
           ],
