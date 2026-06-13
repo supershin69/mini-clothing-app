@@ -76,7 +76,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   width: double.infinity,
                   padding: const EdgeInsets.all(30),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Theme.of(context).colorScheme.surface,
                     borderRadius: const BorderRadius.only(
                       bottomLeft: Radius.circular(30),
                       bottomRight: Radius.circular(30),
@@ -127,9 +127,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     children: [
                       // 📦 1. Your Orders Field (Tappable Tile)
                       Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
                         child: ListTile(
                           onTap: () {
                             // 🚀 Order Screen အသစ်ဆီသို့ တွန်းပို့ခြင်း
@@ -148,10 +145,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             'Your Orders',
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
-                          trailing: const Icon(
+                          trailing: Icon(
                             Icons.arrow_forward_ios,
                             size: 16,
-                            color: Colors.grey,
+                            color: Theme.of(context).disabledColor,
                           ),
                         ),
                       ),
@@ -159,22 +156,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                       // 🔐 2. Logout Button Widget
                       Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
                         child: ListTile(
                           onTap: () async {
                             await _apiService.logoutUser();
                             widget.onLogoutSuccess();
                           },
-                          leading: const Icon(
+                          leading: Icon(
                             Icons.logout,
-                            color: Colors.redAccent,
+                            color: Theme.of(context).colorScheme.error,
                           ),
-                          title: const Text(
+                          title: Text(
                             'Logout',
                             style: TextStyle(
-                              color: Colors.redAccent,
+                              color: Theme.of(context).colorScheme.error,
                               fontWeight: FontWeight.bold,
                             ),
                           ),

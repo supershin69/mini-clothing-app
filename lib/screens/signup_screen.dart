@@ -8,8 +8,8 @@ class RegisterScreen extends StatefulWidget {
   final VoidCallback onBackToLogin;
 
   const RegisterScreen({
-    super.key, 
-    required this.onRegisterSuccess, 
+    super.key,
+    required this.onRegisterSuccess,
     required this.onBackToLogin,
   });
 
@@ -28,9 +28,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final ApiService _apiService = ApiService();
   File? _imageFile;
   final ImagePicker _picker = ImagePicker();
-  
+
   bool _isLoading = false;
-  bool _isOtpStage = false; // true ဖြစ်သွားရင် OTP ရိုက်တဲ့ Screen UI ပြောင်းမယ်
+  bool _isOtpStage =
+      false; // true ဖြစ်သွားရင် OTP ရိုက်တဲ့ Screen UI ပြောင်းမယ်
 
   @override
   void dispose() {
@@ -65,7 +66,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final password = _passwordController.text.trim();
     final confirmPassword = _confirmPasswordController.text.trim();
 
-    if (name.isEmpty || email.isEmpty || phone.isEmpty || password.isEmpty || confirmPassword.isEmpty) {
+    if (name.isEmpty ||
+        email.isEmpty ||
+        phone.isEmpty ||
+        password.isEmpty ||
+        confirmPassword.isEmpty) {
       _showSnackBar('ကျေးဇူးပြု၍ အချက်အလက်များ အပြည့်အစုံဖြည့်ပါ');
       return;
     }
@@ -75,7 +80,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
       return;
     }
 
-    setState(() { _isLoading = true; });
+    setState(() {
+      _isLoading = true;
+    });
 
     try {
       // 🚀 Backend Flow အသစ်အတိုင်း Register တန်းလုပ်လိုက်တာနဲ့ Server က OTP အလိုအလျောက် ပို့ပေးမှာပါ
@@ -84,17 +91,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
         email: email,
         phone: phone,
         password: password,
-      ); 
-      
+      );
+
       _showSnackBar('မင်းရဲ့ Gmail ထဲကို OTP ဂဏန်း ပို့ပေးလိုက်ပါပြီ');
-      
+
       setState(() {
         _isOtpStage = true; // ✨ အောင်မြင်ရင် OTP ရိုက်တဲ့ အဆင့်ကို ကူးလိုက်ပြီ!
       });
     } catch (e) {
       _showSnackBar(e.toString().replaceAll('Exception:', ''));
     } finally {
-      setState(() { _isLoading = false; });
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -108,7 +117,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
       return;
     }
 
-    setState(() { _isLoading = true; });
+    setState(() {
+      _isLoading = true;
+    });
 
     try {
       // Backend ရဲ့ /auth/verify-otp ဆီ ပို့စစ်တယ်
@@ -116,19 +127,26 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
       if (isOtpValid) {
         _showSnackBar('အကောင့်ဖွင့်ခြင်း အောင်မြင်ပါသည်');
-        widget.onRegisterSuccess(); // 🎉 ပွဲသိမ်းပြီ! App ထဲ တန်းဝင်ခိုင်းလိုက်မယ်
+        widget
+            .onRegisterSuccess(); // 🎉 ပွဲသိမ်းပြီ! App ထဲ တန်းဝင်ခိုင်းလိုက်မယ်
       } else {
-        _showSnackBar('OTP ဂဏန်း မှားယွင်းနေပါသည် သို့မဟုတ် သက်တမ်းကုန်ဆုံးသွားပါပြီ');
+        _showSnackBar(
+          'OTP ဂဏန်း မှားယွင်းနေပါသည် သို့မဟုတ် သက်တမ်းကုန်ဆုံးသွားပါပြီ',
+        );
       }
     } catch (e) {
       _showSnackBar(e.toString().replaceAll('Exception:', ''));
     } finally {
-      setState(() { _isLoading = false; });
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
   void _showSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(message)));
   }
 
   @override
@@ -157,12 +175,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
         Text(
           'Create Account',
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Theme.of(context).primaryColor),
+          style: TextStyle(
+            fontSize: 28,
+            fontWeight: FontWeight.bold,
+            color: Theme.of(context).primaryColor,
+          ),
         ),
-        const Text(
+        Text(
           'Sign up to get started on your shopping profile',
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 14, color: Colors.grey),
+          style: TextStyle(
+            fontSize: 14,
+            color: Theme.of(context).disabledColor,
+          ),
         ),
         const SizedBox(height: 24),
 
@@ -172,9 +197,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
             children: [
               CircleAvatar(
                 radius: 55,
-                backgroundColor: Colors.grey[200],
-                backgroundImage: _imageFile != null ? FileImage(_imageFile!) : null,
-                child: _imageFile == null ? Icon(Icons.person, size: 55, color: Colors.grey[400]) : null,
+                backgroundColor: Theme.of(
+                  context,
+                ).inputDecorationTheme.fillColor,
+                backgroundImage: _imageFile != null
+                    ? FileImage(_imageFile!)
+                    : null,
+                child: _imageFile == null
+                    ? Icon(
+                        Icons.person,
+                        size: 55,
+                        color: Theme.of(context).disabledColor.withOpacity(0.7),
+                      )
+                    : null,
               ),
               Positioned(
                 bottom: 0,
@@ -184,7 +219,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   child: CircleAvatar(
                     radius: 18,
                     backgroundColor: Theme.of(context).primaryColor,
-                    child: const Icon(Icons.camera_alt, size: 16, color: Colors.white),
+                    child: const Icon(
+                      Icons.camera_alt,
+                      size: 16,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),
@@ -197,7 +236,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
           controller: _nameController,
           decoration: InputDecoration(
             labelText: 'Full Name',
-            prefixIcon: const Icon(Icons.person_outline),
+            prefixIcon: Icon(
+              Icons.person_outline,
+              color: Theme.of(context).disabledColor,
+            ),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
           ),
         ),
@@ -208,7 +250,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
           keyboardType: TextInputType.emailAddress,
           decoration: InputDecoration(
             labelText: 'Email Address',
-            prefixIcon: const Icon(Icons.email_outlined),
+            prefixIcon: Icon(
+              Icons.email_outlined,
+              color: Theme.of(context).disabledColor,
+            ),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
           ),
         ),
@@ -219,7 +264,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
           keyboardType: TextInputType.phone,
           decoration: InputDecoration(
             labelText: 'Phone Number',
-            prefixIcon: const Icon(Icons.phone_outlined),
+            prefixIcon: Icon(
+              Icons.phone_outlined,
+              color: Theme.of(context).disabledColor,
+            ),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
           ),
         ),
@@ -230,7 +278,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
           obscureText: true,
           decoration: InputDecoration(
             labelText: 'Password',
-            prefixIcon: const Icon(Icons.lock_outline),
+            prefixIcon: Icon(
+              Icons.lock_outline,
+              color: Theme.of(context).disabledColor,
+            ),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
           ),
         ),
@@ -241,7 +292,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
           obscureText: true,
           decoration: InputDecoration(
             labelText: 'Confirm Password',
-            prefixIcon: const Icon(Icons.lock_clock_outlined),
+            prefixIcon: Icon(
+              Icons.lock_clock_outlined,
+              color: Theme.of(context).disabledColor,
+            ),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
           ),
         ),
@@ -252,22 +306,36 @@ class _RegisterScreenState extends State<RegisterScreen> {
           style: ElevatedButton.styleFrom(
             padding: const EdgeInsets.symmetric(vertical: 16),
             backgroundColor: Theme.of(context).primaryColor,
-            foregroundColor: Colors.white,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            foregroundColor: Theme.of(context).colorScheme.onPrimary,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
           ),
           child: _isLoading
-              ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
-              : const Text('Register', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              ? SizedBox(
+                  height: 20,
+                  width: 20,
+                  child: CircularProgressIndicator(
+                    color: Theme.of(context).colorScheme.onPrimary,
+                    strokeWidth: 2,
+                  ),
+                )
+              : const Text(
+                  'Register',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
         ),
         const SizedBox(height: 16),
 
         TextButton(
           onPressed: widget.onBackToLogin,
-          style: TextButton.styleFrom(foregroundColor: Theme.of(context).primaryColor),
-          child: const Text('Already have an account? Login'),
+          style: TextButton.styleFrom(
+            foregroundColor: Theme.of(context).primaryColor,
           ),
-        ],
-      );
+          child: const Text('Already have an account? Login'),
+        ),
+      ],
+    );
   }
 
   // 📧 Email Verification / OTP ရိုက်ရမည့် UI (Step 2)
@@ -276,18 +344,29 @@ class _RegisterScreenState extends State<RegisterScreen> {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Icon(Icons.mark_email_unread_outlined, size: 80, color: Theme.of(context).primaryColor),
+        Icon(
+          Icons.mark_email_unread_outlined,
+          size: 80,
+          color: Theme.of(context).primaryColor,
+        ),
         const SizedBox(height: 24),
-        const Text(
+        Text(
           'Email Verification',
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: Theme.of(context).primaryColor,
+          ),
         ),
         const SizedBox(height: 8),
         Text(
           'မင်းရဲ့ Email (${_emailController.text}) ဆီကို ပို့လိုက်တဲ့ OTP ဂဏန်းကို ရိုက်ထည့်ပေးပါ',
           textAlign: TextAlign.center,
-          style: const TextStyle(fontSize: 14, color: Colors.grey),
+          style: TextStyle(
+            fontSize: 14,
+            color: Theme.of(context).disabledColor,
+          ),
         ),
         const SizedBox(height: 32),
 
@@ -295,7 +374,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
           controller: _otpController,
           keyboardType: TextInputType.number,
           textAlign: TextAlign.center,
-          style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, letterSpacing: 8),
+          style: const TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+            letterSpacing: 8,
+          ),
           decoration: InputDecoration(
             hintText: '000000',
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
@@ -308,20 +391,37 @@ class _RegisterScreenState extends State<RegisterScreen> {
           style: ElevatedButton.styleFrom(
             padding: const EdgeInsets.symmetric(vertical: 16),
             backgroundColor: Theme.of(context).primaryColor,
-            foregroundColor: Colors.white,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            foregroundColor: Theme.of(context).colorScheme.onPrimary,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
           ),
           child: _isLoading
-              ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
-              : const Text('Verify & Create Account', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              ? SizedBox(
+                  height: 20,
+                  width: 20,
+                  child: CircularProgressIndicator(
+                    color: Theme.of(context).colorScheme.onPrimary,
+                    strokeWidth: 2,
+                  ),
+                )
+              : const Text(
+                  'Verify & Create Account',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
         ),
         const SizedBox(height: 16),
 
         TextButton(
           onPressed: () {
-            setState(() { _isOtpStage = false; });
+            setState(() {
+              _isOtpStage = false;
+            });
           },
-          child: const Text('Back to Edit Info', style: TextStyle(color: Colors.grey)),
+          child: Text(
+            'Back to Edit Info',
+            style: TextStyle(color: Theme.of(context).disabledColor),
+          ),
         ),
       ],
     );

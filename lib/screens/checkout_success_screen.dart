@@ -14,7 +14,7 @@ class CheckoutSuccessScreen extends StatelessWidget {
         orderData.orderLines; // 💡 ကွက်တိ Type မိသွားပါပြီ
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -27,29 +27,31 @@ class CheckoutSuccessScreen extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFE5D3B3).withOpacity(0.3),
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.secondary.withOpacity(0.3),
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.check_circle,
                   size: 72,
-                  color: Color(0xFF1A1A1A),
+                  color: Theme.of(context).primaryColor,
                 ),
               ),
               const SizedBox(height: 24),
-              const Text(
+              Text(
                 "Order Placed Successfully!",
                 style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF1A1A1A),
+                  color: Theme.of(context).primaryColor,
                 ),
               ),
               const SizedBox(height: 8),
               Text(
                 "Order ID: ${orderData.id}",
-                style: const TextStyle(
-                  color: Colors.grey,
+                style: TextStyle(
+                  color: Theme.of(context).disabledColor,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -124,10 +126,10 @@ class CheckoutSuccessScreen extends StatelessWidget {
                     ),
                     Text(
                       "\$${orderData.totalAmount.toStringAsFixed(2)}", // 💡 .totalAmount ကို တိုက်ရိုက်ခေါ်ခြင်း
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 20,
-                        color: Color(0xFF1A1A1A),
+                        color: Theme.of(context).primaryColor,
                       ),
                     ),
                   ],
@@ -149,7 +151,7 @@ class CheckoutSuccessScreen extends StatelessWidget {
                     Navigator.popUntil(context, (route) => route.isFirst);
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF1A1A1A),
+                    backgroundColor: Theme.of(context).primaryColor,
                   ),
                   child: const Text(
                     "RETURN TO HOME",

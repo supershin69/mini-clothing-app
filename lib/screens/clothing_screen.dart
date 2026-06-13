@@ -30,7 +30,7 @@ class _ClothingScreenState extends State<ClothingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -40,14 +40,17 @@ class _ClothingScreenState extends State<ClothingScreen> {
             child: TextField(
               onChanged: (value) {
                 setState(() {
-                  _searchQuery = value; 
+                  _searchQuery = value;
                 });
               },
               decoration: InputDecoration(
                 hintText: "Search clothing...",
-                prefixIcon: const Icon(Icons.search, color: Colors.grey),
+                prefixIcon: Icon(
+                  Icons.search,
+                  color: Theme.of(context).disabledColor,
+                ),
                 filled: true,
-                fillColor: const Color(0xFFF5F5F5),
+                fillColor: Theme.of(context).inputDecorationTheme.fillColor,
                 contentPadding: const EdgeInsets.symmetric(vertical: 12),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -61,7 +64,10 @@ class _ClothingScreenState extends State<ClothingScreen> {
           SizedBox(
             height: 60,
             child: ListView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 10.0),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 12.0,
+                vertical: 10.0,
+              ),
               scrollDirection: Axis.horizontal,
               itemCount: _categories.length,
               itemBuilder: (context, index) {
@@ -73,20 +79,27 @@ class _ClothingScreenState extends State<ClothingScreen> {
                   child: GestureDetector(
                     onTap: () {
                       setState(() {
-                        _selectedCategory = category; 
+                        _selectedCategory = category;
                       });
                     },
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 8,
+                      ),
                       decoration: BoxDecoration(
-                        color: isSelected ? const Color(0xFF1A1A1A) : const Color(0xFFF5F5F5),
+                        color: isSelected
+                            ? Theme.of(context).primaryColor
+                            : Theme.of(context).inputDecorationTheme.fillColor,
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Center(
                         child: Text(
                           category,
                           style: TextStyle(
-                            color: isSelected ? Colors.white : const Color(0xFF555555),
+                            color: isSelected
+                                ? Theme.of(context).colorScheme.onPrimary
+                                : Theme.of(context).disabledColor,
                             fontWeight: FontWeight.bold,
                             fontSize: 14,
                           ),
@@ -106,8 +119,10 @@ class _ClothingScreenState extends State<ClothingScreen> {
               builder: (context, snapshot) {
                 // State A: Loading data from server
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(
-                    child: CircularProgressIndicator(color: Color(0xFF1A1A1A)),
+                  return Center(
+                    child: CircularProgressIndicator(
+                      color: Theme.of(context).primaryColor,
+                    ),
                   );
                 }
 
@@ -121,37 +136,45 @@ class _ClothingScreenState extends State<ClothingScreen> {
 
                 // 4. Apply your search & filtering logic locally to the incoming network array
                 final filteredProducts = masterProducts.where((product) {
-                  final matchesSearch = product.name.toLowerCase().contains(_searchQuery.toLowerCase());
-                  final matchesCategory = _selectedCategory == 'All' || 
-                      product.gender.name.toLowerCase() == _selectedCategory.toLowerCase();
+                  final matchesSearch = product.name.toLowerCase().contains(
+                    _searchQuery.toLowerCase(),
+                  );
+                  final matchesCategory =
+                      _selectedCategory == 'All' ||
+                      product.gender.name.toLowerCase() ==
+                          _selectedCategory.toLowerCase();
                   return matchesSearch && matchesCategory;
                 }).toList();
 
                 // State C: Successful data retrieved, check if filtered sublist is empty
                 if (filteredProducts.isEmpty) {
-                  return _buildEmptyState(); 
+                  return _buildEmptyState();
                 }
 
                 // State D: Populate grid items
                 return GridView.builder(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8.0,
+                    vertical: 8.0,
+                  ),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2, 
+                    crossAxisCount: 2,
                     crossAxisSpacing: 4,
                     mainAxisSpacing: 8,
-                    childAspectRatio: 0.65, 
+                    childAspectRatio: 0.65,
                   ),
                   itemCount: filteredProducts.length,
                   itemBuilder: (context, index) {
                     final product = filteredProducts[index];
-                    
+
                     return ClothingCard(
                       product: product,
                       onTap: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => ProductDetailPage(product: product),
+                            builder: (context) =>
+                                ProductDetailPage(product: product),
                           ),
                         );
                       },
@@ -167,15 +190,23 @@ class _ClothingScreenState extends State<ClothingScreen> {
   }
 
   Widget _buildEmptyState() {
-    return const Center(
+    return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.inventory_2_outlined, size: 48, color: Colors.grey),
-          SizedBox(height: 12),
+          Icon(
+            Icons.inventory_2_outlined,
+            size: 48,
+            color: Theme.of(context).disabledColor,
+          ),
+          const SizedBox(height: 12),
           Text(
             "No clothing found!",
-            style: TextStyle(fontSize: 16, color: Colors.grey, fontWeight: FontWeight.w500),
+            style: TextStyle(
+              fontSize: 16,
+              color: Theme.of(context).disabledColor,
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ],
       ),
@@ -190,7 +221,11 @@ class _ClothingScreenState extends State<ClothingScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.cloud_off_rounded, size: 48, color: Colors.redAccent),
+            Icon(
+              Icons.cloud_off_rounded,
+              size: 48,
+              color: Theme.of(context).colorScheme.error,
+            ),
             const SizedBox(height: 12),
             const Text(
               "Connection Error",
@@ -200,7 +235,10 @@ class _ClothingScreenState extends State<ClothingScreen> {
             Text(
               message,
               textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 12, color: Colors.grey),
+              style: TextStyle(
+                fontSize: 12,
+                color: Theme.of(context).disabledColor,
+              ),
             ),
           ],
         ),

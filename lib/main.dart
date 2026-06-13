@@ -31,15 +31,39 @@ class MyApp extends StatelessWidget {
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
         splashFactory: NoSplash.splashFactory,
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF7C4DFF))
+            .copyWith(
+              primary: const Color(0xFF1A1A1A),
+              secondary: const Color(0xFF7C4DFF),
+              background: const Color(0xFFF8F9FA),
+              surface: Colors.white,
+              onPrimary: Colors.white,
+              onSurface: const Color(0xFF2D2D2D),
+              error: Colors.redAccent,
+            ),
 
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF1A1A1A),
-          secondary: const Color(0xFFE5D3B3),
+        // Centralized component theming
+        disabledColor: Colors.grey,
+        hintColor: Colors.grey,
+        cardTheme: CardThemeData(
+          color: Colors.white,
+          elevation: 4,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+        inputDecorationTheme: InputDecorationTheme(
+          filled: true,
+          fillColor: const Color(0xFFF5F5F5),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide.none,
+          ),
         ),
 
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
           backgroundColor: Color(0xFF1A1A1A),
-          selectedItemColor: Color(0xFFE5D3B3),
+          selectedItemColor: Color(0xFF7C4DFF),
           unselectedItemColor: Colors.grey,
           selectedIconTheme: IconThemeData(size: 26),
           type: BottomNavigationBarType.fixed,
@@ -51,7 +75,7 @@ class MyApp extends StatelessWidget {
             backgroundColor: const Color(0xFF1A1A1A),
             foregroundColor: Colors.white,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(10),
             ),
           ),
         ),
