@@ -39,6 +39,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   image_picker: ^1.2.2
   flex_color_scheme: ^8.4.0
+  firebase_messaging: ^16.3.0
 
 dev_dependencies:
   flutter_test:
