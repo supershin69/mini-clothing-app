@@ -1,6 +1,7 @@
+import 'package:clothing_shop/l10n/app_localizations.dart';
 import 'package:clothing_shop/screens/checkout_success_screen.dart';
 import 'package:clothing_shop/state/cart_provider.dart';
-import 'package:clothing_shop/models/order_model.dart'; // 💡 OrderModel Type ကို သေချာသိအောင် တစ်ခါတည်း import ထည့်ထားပေးပါတယ်
+import 'package:clothing_shop/models/order_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -9,12 +10,13 @@ class CartScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Consumer<CartProvider>(
         builder: (context, cartProvider, child) {
           if (cartProvider.cartItems.isEmpty) {
-            return _buildEmptyCart(context); // Passed context here
+            return _buildEmptyCart(context);
           }
 
           return Column(
@@ -42,7 +44,6 @@ class CartScreen extends StatelessWidget {
                             ),
                             child: Row(
                               children: [
-                                // --- 🖼️ IMAGE WITH ERROR & LOADING BUILDER ---
                                 ClipRRect(
                                   borderRadius: BorderRadius.circular(8),
                                   child: Image.network(
@@ -95,7 +96,6 @@ class CartScreen extends StatelessWidget {
                                 ),
                                 const SizedBox(width: 16),
 
-                                // --- 📝 PRODUCT DETAILS ---
                                 Expanded(
                                   child: Column(
                                     crossAxisAlignment:
@@ -112,7 +112,7 @@ class CartScreen extends StatelessWidget {
                                       ),
                                       const SizedBox(height: 4),
                                       Text(
-                                        "Size: ${item.selectedSize}",
+                                        "${l10n.size}: ${item.selectedSize}",
                                         style: TextStyle(
                                           color: Theme.of(
                                             context,
@@ -132,7 +132,6 @@ class CartScreen extends StatelessWidget {
                                   ),
                                 ),
 
-                                // --- 🗑️ DELETE & QUANTITY CONTROLLER ---
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
@@ -217,8 +216,8 @@ class CartScreen extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
-                              "Order Summary",
+                            Text(
+                              l10n.orderSummary,
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
@@ -228,13 +227,13 @@ class CartScreen extends StatelessWidget {
                             // Passed context to helper methods
                             _buildPriceRow(
                               context,
-                              "Subtotal",
+                              l10n.subTotal,
                               "\$${cartProvider.subtotalAmount.toStringAsFixed(2)}",
                             ),
                             const SizedBox(height: 10),
                             _buildPriceRow(
                               context,
-                              "Shipping Fee",
+                              l10n.shippingFee,
                               cartProvider.shippingFee == 0
                                   ? "Free"
                                   : "\$${cartProvider.shippingFee.toStringAsFixed(2)}",
@@ -251,7 +250,7 @@ class CartScreen extends StatelessWidget {
                             ),
                             _buildPriceRow(
                               context,
-                              "Total Price",
+                              l10n.totalPrice,
                               "\$${cartProvider.totalAmount.toStringAsFixed(2)}",
                               isTotal: true,
                             ),
@@ -263,7 +262,6 @@ class CartScreen extends StatelessWidget {
                 ),
               ),
 
-              // --- 🛒 CHECKOUT BUTTON SECTION ---
               Container(
                 padding: EdgeInsets.fromLTRB(
                   16,
@@ -307,7 +305,6 @@ class CartScreen extends StatelessWidget {
                       }
 
                       if (success && context.mounted) {
-                        // 💡 liveOrderData ရဲ့ Type ကို OrderModel ဖြစ်ကြောင်း သေချာအောင် သတ်မှတ်ပေးလိုက်ပါတယ်
                         final OrderModel? liveOrderData =
                             provider.lastPlacedOrder;
 
@@ -316,8 +313,7 @@ class CartScreen extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                               builder: (context) => CheckoutSuccessScreen(
-                                orderData:
-                                    liveOrderData, // 🚀 အောင်မြင်စွာ ပါးလိုက်ပါပြီ
+                                orderData: liveOrderData,
                               ),
                             ),
                           );
@@ -336,8 +332,8 @@ class CartScreen extends StatelessWidget {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Theme.of(context).primaryColor,
                     ),
-                    child: const Text(
-                      "PROCEED TO CHECKOUT",
+                    child: Text(
+                      l10n.proceedToCheckout,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 14,
@@ -354,7 +350,6 @@ class CartScreen extends StatelessWidget {
     );
   }
 
-  // Required 'BuildContext context' parameter added here
   Widget _buildPriceRow(
     BuildContext context,
     String label,
@@ -388,8 +383,8 @@ class CartScreen extends StatelessWidget {
     );
   }
 
-  // Required 'BuildContext context' parameter added here
   Widget _buildEmptyCart(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -401,7 +396,7 @@ class CartScreen extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            "Your cart is empty!",
+            l10n.emptyCart,
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
@@ -410,7 +405,7 @@ class CartScreen extends StatelessWidget {
           ),
           const SizedBox(height: 6),
           Text(
-            "Add some items to get started.",
+            l10n.addClothesEmptyCartText,
             style: TextStyle(color: Theme.of(context).disabledColor),
           ),
         ],

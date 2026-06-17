@@ -82,9 +82,7 @@ class ClothingCard extends StatelessWidget {
                           vertical: 4,
                         ),
                         decoration: BoxDecoration(
-                          color: Theme.of(
-                            context,
-                          ).primaryColor.withOpacity(0.75),
+                          color: Colors.redAccent,
                           borderRadius: BorderRadius.circular(6),
                         ),
                         child: Text(

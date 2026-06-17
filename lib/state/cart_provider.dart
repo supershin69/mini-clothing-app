@@ -1,5 +1,5 @@
 import 'package:clothing_shop/models/order_model.dart';
-import 'package:clothing_shop/services/api_service.dart'; // ✅ Make sure this import path matches your project structure
+import 'package:clothing_shop/services/api_service.dart';
 import 'package:clothing_shop/models/product_model.dart';
 import 'package:flutter/material.dart';
 
@@ -19,9 +19,15 @@ class CartItemModel {
 
 class CartProvider with ChangeNotifier {
   final Map<String, CartItemModel> _cartItems = {};
-  final ApiService _apiService = ApiService(); // ✅ Initialize API Service
 
-  // 📦 Map အစား OrderModel သို့ ပြောင်းလဲသတ်မှတ်ခြင်း
+  ApiService _apiService;
+
+  CartProvider({required ApiService apiService}) : _apiService = apiService;
+
+  void updateApiService(ApiService newApiService) {
+    _apiService = newApiService;
+  }
+
   OrderModel? _lastPlacedOrder;
   OrderModel? get lastPlacedOrder => _lastPlacedOrder;
 
@@ -55,16 +61,14 @@ class CartProvider with ChangeNotifier {
         return {'variant_id': matchedVariant.id, 'quantity': item.quantity};
       }).toList();
 
-      // ApiService က createOrder သို့မဟုတ် getMyOrders ကနေ OrderModel ပြန်ပေးတာမို့လို့
-      // တိုက်ရိုက် assign လုပ်ပေးလို့ ရသွားပါပြီ
       final responseData = await _apiService.createOrder(items: targetItems);
-      print("📦 API RESPONSE DATA: $responseData");
+      print("API RESPONSE DATA: $responseData");
       _lastPlacedOrder = OrderModel.fromJson(responseData['order']);
 
       clearCart();
       return true;
     } catch (e) {
-      print("❌ Error processing checkout pipeline inside Provider: $e");
+      print("Error processing checkout pipeline inside Provider: $e");
       return false;
     }
   }

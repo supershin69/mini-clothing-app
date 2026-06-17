@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:clothing_shop/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import '../services/api_service.dart';
@@ -25,7 +26,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _confirmPasswordController = TextEditingController();
   final _otpController = TextEditingController();
 
-  final ApiService _apiService = ApiService();
+  late final ApiService _apiService;
   File? _imageFile;
   final ImagePicker _picker = ImagePicker();
 
@@ -44,6 +45,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
     super.dispose();
   }
 
+  @override
+  void initState() {
+    super.initState();
+    _apiService = ApiService(context);
+  }
+
   Future<void> _pickImage() async {
     final XFile? pickedFile = await _picker.pickImage(
       source: ImageSource.gallery,
@@ -58,7 +65,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     }
   }
 
-  // 📝 အဆင့် (၁) - အချက်အလက်များဖြင့် အကောင့်အရင်ဆောက်ပြီး OTP UI သို့ ကူးပြောင်းခြင်း
   void _submitRegistrationInfo() async {
     final name = _nameController.text.trim();
     final email = _emailController.text.trim();
@@ -85,7 +91,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     });
 
     try {
-      // 🚀 Backend Flow အသစ်အတိုင်း Register တန်းလုပ်လိုက်တာနဲ့ Server က OTP အလိုအလျောက် ပို့ပေးမှာပါ
       await _apiService.registerUser(
         name: name,
         email: email,
@@ -93,10 +98,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
         password: password,
       );
 
-      _showSnackBar('မင်းရဲ့ Gmail ထဲကို OTP ဂဏန်း ပို့ပေးလိုက်ပါပြီ');
+      _showSnackBar('သင့်ရဲ့ Gmail ထဲကို OTP ဂဏန်း ပို့ပေးလိုက်ပါပြီ');
 
       setState(() {
-        _isOtpStage = true; // ✨ အောင်မြင်ရင် OTP ရိုက်တဲ့ အဆင့်ကို ကူးလိုက်ပြီ!
+        _isOtpStage = true;
       });
     } catch (e) {
       _showSnackBar(e.toString().replaceAll('Exception:', ''));
@@ -107,7 +112,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     }
   }
 
-  // 🔑 အဆင့် (၂) - ရိုက်ထည့်လိုက်သော OTP ကို တိုက်ရိုက်ပို့စစ်ပြီး ပွဲသိမ်းခြင်း
   void _verifyOtpAndRegister() async {
     final email = _emailController.text.trim();
     final otp = _otpController.text.trim();
@@ -122,13 +126,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
     });
 
     try {
-      // Backend ရဲ့ /auth/verify-otp ဆီ ပို့စစ်တယ်
       bool isOtpValid = await _apiService.verifyOtp(email: email, otp: otp);
 
       if (isOtpValid) {
         _showSnackBar('အကောင့်ဖွင့်ခြင်း အောင်မြင်ပါသည်');
-        widget
-            .onRegisterSuccess(); // 🎉 ပွဲသိမ်းပြီ! App ထဲ တန်းဝင်ခိုင်းလိုက်မယ်
+        widget.onRegisterSuccess();
       } else {
         _showSnackBar(
           'OTP ဂဏန်း မှားယွင်းနေပါသည် သို့မဟုတ် သက်တမ်းကုန်ဆုံးသွားပါပြီ',
@@ -166,14 +168,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  // 📝 ရှေ့တန်း Form ဖြည့်ရမည့် UI (Step 1)
   Widget _buildRegistrationFormUI() {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Text(
-          'Create Account',
+          l10n.createAccount,
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 28,
@@ -182,7 +184,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ),
         ),
         Text(
-          'Sign up to get started on your shopping profile',
+          l10n.signUpText,
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 14,
@@ -191,7 +193,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
         const SizedBox(height: 24),
 
-        // Profile Image Picker (UI အလှအဖြစ် ခဏထားထားပေးပါတယ်)
         Center(
           child: Stack(
             children: [
@@ -235,7 +236,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         TextField(
           controller: _nameController,
           decoration: InputDecoration(
-            labelText: 'Full Name',
+            labelText: l10n.name,
             prefixIcon: Icon(
               Icons.person_outline,
               color: Theme.of(context).disabledColor,
@@ -249,7 +250,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           controller: _emailController,
           keyboardType: TextInputType.emailAddress,
           decoration: InputDecoration(
-            labelText: 'Email Address',
+            labelText: l10n.email,
             prefixIcon: Icon(
               Icons.email_outlined,
               color: Theme.of(context).disabledColor,
@@ -263,7 +264,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           controller: _phoneController,
           keyboardType: TextInputType.phone,
           decoration: InputDecoration(
-            labelText: 'Phone Number',
+            labelText: l10n.phoneNo,
             prefixIcon: Icon(
               Icons.phone_outlined,
               color: Theme.of(context).disabledColor,
@@ -277,7 +278,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           controller: _passwordController,
           obscureText: true,
           decoration: InputDecoration(
-            labelText: 'Password',
+            labelText: l10n.password,
             prefixIcon: Icon(
               Icons.lock_outline,
               color: Theme.of(context).disabledColor,
@@ -291,7 +292,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           controller: _confirmPasswordController,
           obscureText: true,
           decoration: InputDecoration(
-            labelText: 'Confirm Password',
+            labelText: l10n.confirmPassword,
             prefixIcon: Icon(
               Icons.lock_clock_outlined,
               color: Theme.of(context).disabledColor,
@@ -320,8 +321,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     strokeWidth: 2,
                   ),
                 )
-              : const Text(
-                  'Register',
+              : Text(
+                  l10n.register,
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
         ),
@@ -332,14 +333,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
           style: TextButton.styleFrom(
             foregroundColor: Theme.of(context).primaryColor,
           ),
-          child: const Text('Already have an account? Login'),
+          child: Text(l10n.alreadyHaveAcc),
         ),
       ],
     );
   }
 
-  // 📧 Email Verification / OTP ရိုက်ရမည့် UI (Step 2)
   Widget _buildOtpUI() {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -351,7 +352,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
         const SizedBox(height: 24),
         Text(
-          'Email Verification',
+          l10n.emailVerification,
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 24,
@@ -361,7 +362,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
         const SizedBox(height: 8),
         Text(
-          'မင်းရဲ့ Email (${_emailController.text}) ဆီကို ပို့လိုက်တဲ့ OTP ဂဏန်းကို ရိုက်ထည့်ပေးပါ',
+          l10n.verificationReqText(_emailController.text),
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 14,
@@ -405,8 +406,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     strokeWidth: 2,
                   ),
                 )
-              : const Text(
-                  'Verify & Create Account',
+              : Text(
+                  l10n.verifyAndCreateAccount,
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
         ),

@@ -1,15 +1,16 @@
+import 'package:clothing_shop/l10n/app_localizations.dart';
+
 import '../services/api_service.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
   final VoidCallback onLoginSuccess;
-  final VoidCallback
-  onGoToRegister; // ✅ Register ဘက်ကူးဖို့ အကြောင်းကြားမည့် Callback
+  final VoidCallback onGoToRegister;
 
   const LoginScreen({
     super.key,
     required this.onLoginSuccess,
-    required this.onGoToRegister, // ✅ Constructor ထဲထည့်ပေးပါ
+    required this.onGoToRegister,
   });
 
   @override
@@ -19,7 +20,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  final ApiService _apiService = ApiService();
+  late final ApiService _apiService;
   bool _isLoading = false;
 
   @override
@@ -27,6 +28,12 @@ class _LoginScreenState extends State<LoginScreen> {
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _apiService = ApiService(context);
   }
 
   void _handleLogin() async {
@@ -62,6 +69,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
@@ -80,7 +88,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    'Welcome Back',
+                    l10n.welcomeBack,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 28,
@@ -89,7 +97,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   Text(
-                    'Sign in to your clothing account',
+                    l10n.signInText,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 14,
@@ -102,7 +110,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
-                      labelText: 'Email Address',
+                      labelText: l10n.email,
                       prefixIcon: Icon(
                         Icons.email_outlined,
                         color: Theme.of(context).disabledColor,
@@ -118,7 +126,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     controller: _passwordController,
                     obscureText: true,
                     decoration: InputDecoration(
-                      labelText: 'Password',
+                      labelText: l10n.password,
                       prefixIcon: Icon(
                         Icons.lock_outline,
                         color: Theme.of(context).disabledColor,
@@ -149,8 +157,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               strokeWidth: 2,
                             ),
                           )
-                        : const Text(
-                            'Login',
+                        : Text(
+                            l10n.login,
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
@@ -160,12 +168,11 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(height: 16),
 
                   TextButton(
-                    onPressed: widget
-                        .onGoToRegister, // ✅ Navigator သုံးမယ့်အစား Callback ကို ခေါ်လိုက်တာပါ
+                    onPressed: widget.onGoToRegister,
                     style: TextButton.styleFrom(
                       foregroundColor: Theme.of(context).primaryColor,
                     ),
-                    child: const Text('Don\'t have an account? Register here'),
+                    child: Text(l10n.donthaveAcc),
                   ),
                 ],
               ),
