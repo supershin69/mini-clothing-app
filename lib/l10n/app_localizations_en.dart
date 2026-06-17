@@ -100,4 +100,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get totalPrice => 'Total Price';
+
+  @override
+  String get proceedToCheckout => 'PROCEED TO CHECKOUT';
+
+  @override
+  String get orderSummary => 'Order Summary';
 }

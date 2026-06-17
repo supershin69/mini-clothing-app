@@ -10,6 +10,7 @@ class CartScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Consumer<CartProvider>(
@@ -111,7 +112,7 @@ class CartScreen extends StatelessWidget {
                                       ),
                                       const SizedBox(height: 4),
                                       Text(
-                                        "Size: ${item.selectedSize}",
+                                        "${l10n.size}: ${item.selectedSize}",
                                         style: TextStyle(
                                           color: Theme.of(
                                             context,
@@ -215,8 +216,8 @@ class CartScreen extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
-                              "Order Summary",
+                            Text(
+                              l10n.orderSummary,
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
@@ -226,13 +227,13 @@ class CartScreen extends StatelessWidget {
                             // Passed context to helper methods
                             _buildPriceRow(
                               context,
-                              "Subtotal",
+                              l10n.subTotal,
                               "\$${cartProvider.subtotalAmount.toStringAsFixed(2)}",
                             ),
                             const SizedBox(height: 10),
                             _buildPriceRow(
                               context,
-                              "Shipping Fee",
+                              l10n.shippingFee,
                               cartProvider.shippingFee == 0
                                   ? "Free"
                                   : "\$${cartProvider.shippingFee.toStringAsFixed(2)}",
@@ -249,7 +250,7 @@ class CartScreen extends StatelessWidget {
                             ),
                             _buildPriceRow(
                               context,
-                              "Total Price",
+                              l10n.totalPrice,
                               "\$${cartProvider.totalAmount.toStringAsFixed(2)}",
                               isTotal: true,
                             ),
@@ -331,8 +332,8 @@ class CartScreen extends StatelessWidget {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Theme.of(context).primaryColor,
                     ),
-                    child: const Text(
-                      "PROCEED TO CHECKOUT",
+                    child: Text(
+                      l10n.proceedToCheckout,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 14,

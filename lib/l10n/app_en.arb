@@ -31,5 +31,6 @@
     "subTotal": "Subtotal",
     "shippingFee": "Shipping Fee",
     "totalPrice": "Total Price",
-    "proceedToCheckout": "PROCEED TO CHECKOUT"
+    "proceedToCheckout": "PROCEED TO CHECKOUT",
+    "orderSummary": "Order Summary"
 }

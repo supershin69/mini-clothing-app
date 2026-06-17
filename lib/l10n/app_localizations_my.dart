@@ -100,4 +100,10 @@ class AppLocalizationsMy extends AppLocalizations {
 
   @override
   String get totalPrice => 'စုစုပေါင်း ကျသင့်ငွေ';
+
+  @override
+  String get proceedToCheckout => 'အော်ဒါတင်ရန်';
+
+  @override
+  String get orderSummary => 'အော်ဒါအကျဉ်းချုပ်';
 }
