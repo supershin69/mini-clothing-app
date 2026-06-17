@@ -163,6 +163,126 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Create Account'**
   String get createAccount;
+
+  /// No description provided for @signUpText.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign up to get started on your shopping profile'**
+  String get signUpText;
+
+  /// No description provided for @name.
+  ///
+  /// In en, this message translates to:
+  /// **'Full Name'**
+  String get name;
+
+  /// No description provided for @email.
+  ///
+  /// In en, this message translates to:
+  /// **'Email Address'**
+  String get email;
+
+  /// No description provided for @phoneNo.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone Number'**
+  String get phoneNo;
+
+  /// No description provided for @password.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get password;
+
+  /// No description provided for @confirmPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Password'**
+  String get confirmPassword;
+
+  /// No description provided for @register.
+  ///
+  /// In en, this message translates to:
+  /// **'Register'**
+  String get register;
+
+  /// No description provided for @alreadyHaveAcc.
+  ///
+  /// In en, this message translates to:
+  /// **'Already have an account? Login'**
+  String get alreadyHaveAcc;
+
+  /// No description provided for @welcomeBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome Back'**
+  String get welcomeBack;
+
+  /// No description provided for @signInText.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in to your clothing account'**
+  String get signInText;
+
+  /// No description provided for @login.
+  ///
+  /// In en, this message translates to:
+  /// **'Login'**
+  String get login;
+
+  /// No description provided for @donthaveAcc.
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t have an account? Register here'**
+  String get donthaveAcc;
+
+  /// No description provided for @search.
+  ///
+  /// In en, this message translates to:
+  /// **'Search clothing...'**
+  String get search;
+
+  /// No description provided for @selectSize.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Size'**
+  String get selectSize;
+
+  /// No description provided for @description.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get description;
+
+  /// No description provided for @addToCart.
+  ///
+  /// In en, this message translates to:
+  /// **'ADD TO CART'**
+  String get addToCart;
+
+  /// No description provided for @size.
+  ///
+  /// In en, this message translates to:
+  /// **'Size'**
+  String get size;
+
+  /// No description provided for @subTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Subtotal'**
+  String get subTotal;
+
+  /// No description provided for @shippingFee.
+  ///
+  /// In en, this message translates to:
+  /// **'Shipping Fee'**
+  String get shippingFee;
+
+  /// No description provided for @totalPrice.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Price'**
+  String get totalPrice;
 }
 
 class _AppLocalizationsDelegate

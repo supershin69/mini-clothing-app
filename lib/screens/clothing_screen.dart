@@ -1,3 +1,4 @@
+import 'package:clothing_shop/l10n/app_localizations.dart';
 import 'package:clothing_shop/screens/product_detail.dart';
 import 'package:flutter/material.dart';
 import '../models/product_model.dart';
@@ -27,6 +28,7 @@ class _ClothingScreenState extends State<ClothingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Column(
@@ -41,7 +43,7 @@ class _ClothingScreenState extends State<ClothingScreen> {
                 });
               },
               decoration: InputDecoration(
-                hintText: "Search clothing...",
+                hintText: l10n.search,
                 prefixIcon: Icon(
                   Icons.search,
                   color: Theme.of(context).disabledColor,

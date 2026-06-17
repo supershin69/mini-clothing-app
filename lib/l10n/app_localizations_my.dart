@@ -40,4 +40,64 @@ class AppLocalizationsMy extends AppLocalizations {
 
   @override
   String get createAccount => 'အကောင့်ဖွင့်ပါ';
+
+  @override
+  String get signUpText => 'အော်ဒါမှာယူရန် အကောင့်ဖွင့်ပါ';
+
+  @override
+  String get name => 'အမည်';
+
+  @override
+  String get email => 'အီးမေးလ်';
+
+  @override
+  String get phoneNo => 'ဖုန်းနံပါတ်';
+
+  @override
+  String get password => 'စကား၀ှက်';
+
+  @override
+  String get confirmPassword => 'စကား၀ှက် ပြန်ရိုက်ပါ';
+
+  @override
+  String get register => 'အကောင့်ဖွင့်ပါ';
+
+  @override
+  String get alreadyHaveAcc => 'အကောင့်ရှိပြီးသားလား? လော့ဂ်အင်၀င်ပါ';
+
+  @override
+  String get welcomeBack => 'ပြန်လည်ကြိုဆိုပါတယ်';
+
+  @override
+  String get signInText => 'အကောင့်သို့ လော့ဂ်အင်၀င်ပါ';
+
+  @override
+  String get login => 'လော့ဂ်အင်၀င်ပါ';
+
+  @override
+  String get donthaveAcc => 'အကောင့်မရှိသေးဘူးလား? ဒီမှာလော့ဂ်အင်၀င်ပါ';
+
+  @override
+  String get search => 'ရှာဖွေပါ...';
+
+  @override
+  String get selectSize => 'ဆိုဒ်ရွေးပါ';
+
+  @override
+  String get description => 'ဖော်ပြချက်';
+
+  @override
+  String get addToCart => 'စျေးလှည်းသို့ ထည့်ရန်';
+
+  @override
+  String get size => 'ဆိုဒ်';
+
+  @override
+  String get subTotal => 'ပစ္စည်းဖိုး';
+
+  @override
+  String get shippingFee => 'Deli ခ';
+
+  @override
+  String get totalPrice => 'စုစုပေါင်း ကျသင့်ငွေ';
 }

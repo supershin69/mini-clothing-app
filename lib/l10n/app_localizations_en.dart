@@ -40,4 +40,64 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get createAccount => 'Create Account';
+
+  @override
+  String get signUpText => 'Sign up to get started on your shopping profile';
+
+  @override
+  String get name => 'Full Name';
+
+  @override
+  String get email => 'Email Address';
+
+  @override
+  String get phoneNo => 'Phone Number';
+
+  @override
+  String get password => 'Password';
+
+  @override
+  String get confirmPassword => 'Confirm Password';
+
+  @override
+  String get register => 'Register';
+
+  @override
+  String get alreadyHaveAcc => 'Already have an account? Login';
+
+  @override
+  String get welcomeBack => 'Welcome Back';
+
+  @override
+  String get signInText => 'Sign in to your clothing account';
+
+  @override
+  String get login => 'Login';
+
+  @override
+  String get donthaveAcc => 'Don\'t have an account? Register here';
+
+  @override
+  String get search => 'Search clothing...';
+
+  @override
+  String get selectSize => 'Select Size';
+
+  @override
+  String get description => 'Description';
+
+  @override
+  String get addToCart => 'ADD TO CART';
+
+  @override
+  String get size => 'Size';
+
+  @override
+  String get subTotal => 'Subtotal';
+
+  @override
+  String get shippingFee => 'Shipping Fee';
+
+  @override
+  String get totalPrice => 'Total Price';
 }

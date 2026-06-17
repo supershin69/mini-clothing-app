@@ -178,7 +178,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ),
         ),
         Text(
-          'Sign up to get started on your shopping profile',
+          l10n.signUpText,
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 14,
@@ -230,7 +230,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         TextField(
           controller: _nameController,
           decoration: InputDecoration(
-            labelText: 'Full Name',
+            labelText: l10n.name,
             prefixIcon: Icon(
               Icons.person_outline,
               color: Theme.of(context).disabledColor,
@@ -244,7 +244,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           controller: _emailController,
           keyboardType: TextInputType.emailAddress,
           decoration: InputDecoration(
-            labelText: 'Email Address',
+            labelText: l10n.email,
             prefixIcon: Icon(
               Icons.email_outlined,
               color: Theme.of(context).disabledColor,
@@ -258,7 +258,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           controller: _phoneController,
           keyboardType: TextInputType.phone,
           decoration: InputDecoration(
-            labelText: 'Phone Number',
+            labelText: l10n.phoneNo,
             prefixIcon: Icon(
               Icons.phone_outlined,
               color: Theme.of(context).disabledColor,
@@ -272,7 +272,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           controller: _passwordController,
           obscureText: true,
           decoration: InputDecoration(
-            labelText: 'Password',
+            labelText: l10n.password,
             prefixIcon: Icon(
               Icons.lock_outline,
               color: Theme.of(context).disabledColor,
@@ -286,7 +286,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           controller: _confirmPasswordController,
           obscureText: true,
           decoration: InputDecoration(
-            labelText: 'Confirm Password',
+            labelText: l10n.confirmPassword,
             prefixIcon: Icon(
               Icons.lock_clock_outlined,
               color: Theme.of(context).disabledColor,
@@ -315,8 +315,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     strokeWidth: 2,
                   ),
                 )
-              : const Text(
-                  'Register',
+              : Text(
+                  l10n.register,
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
         ),
@@ -327,7 +327,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           style: TextButton.styleFrom(
             foregroundColor: Theme.of(context).primaryColor,
           ),
-          child: const Text('Already have an account? Login'),
+          child: Text(l10n.alreadyHaveAcc),
         ),
       ],
     );
