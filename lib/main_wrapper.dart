@@ -1,10 +1,12 @@
+import 'package:clothing_shop/l10n/app_localizations.dart';
 import 'package:clothing_shop/screens/cart_screen.dart';
 import 'package:clothing_shop/screens/clothing_screen.dart';
 import 'package:clothing_shop/screens/home_screen.dart';
 import 'package:clothing_shop/screens/login_screen.dart';
 import 'package:clothing_shop/screens/profile_screen.dart';
 import 'package:clothing_shop/screens/signup_screen.dart';
-import 'package:clothing_shop/state/navigation_provider.dart'; // ✅ Import
+import 'package:clothing_shop/state/language_provider.dart';
+import 'package:clothing_shop/state/navigation_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
@@ -36,8 +38,10 @@ class _MainWrapperState extends State<MainWrapper> {
 
   @override
   Widget build(BuildContext context) {
-    final navigationProvider = context
-        .watch<NavigationProvider>(); // ✅ Watch state
+    final navigationProvider = context.watch<NavigationProvider>();
+    final l10n = AppLocalizations.of(context)!;
+
+    final langProvider = Provider.of<LanguageProvider>(context);
     Widget profileTab;
 
     if (_isLoggedIn) {
@@ -90,27 +94,55 @@ class _MainWrapperState extends State<MainWrapper> {
           'Clothing Shop',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  "🇬🇧",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                Switch(
+                  value: langProvider.isMyanmar,
+                  onChanged: (value) {
+                    langProvider.toggleLanguage();
+                  },
+                ),
+                const Text(
+                  "🇲🇲",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
-      body:
-          screens[navigationProvider
-              .currentIndex], // ✅ Dynamic index via provider
+      body: screens[navigationProvider.currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: navigationProvider.currentIndex,
         type: BottomNavigationBarType.fixed,
         onTap: (index) {
-          navigationProvider.changeTab(index); // ✅ Change tab via provider
+          navigationProvider.changeTab(index);
         },
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: l10n.navBarHome,
+          ),
           BottomNavigationBarItem(
             icon: Icon(Icons.shopping_bag),
-            label: 'Clothing',
+            label: l10n.clothing,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.shopping_cart),
-            label: 'Cart',
+            label: l10n.cart,
           ),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: l10n.profile,
+          ),
         ],
       ),
     );

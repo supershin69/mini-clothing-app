@@ -12,7 +12,6 @@ class ClothingScreen extends StatefulWidget {
 }
 
 class _ClothingScreenState extends State<ClothingScreen> {
-  // 2. Instantiate API Service and Future handle
   final ApiService _apiService = ApiService();
   late Future<List<ProductModel>> _productsFuture;
 
@@ -23,7 +22,6 @@ class _ClothingScreenState extends State<ClothingScreen> {
   @override
   void initState() {
     super.initState();
-    // 3. Kick off the network request once right at start
     _productsFuture = _apiService.fetchProducts();
   }
 
@@ -34,7 +32,6 @@ class _ClothingScreenState extends State<ClothingScreen> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // --- Search Bar ---
           Padding(
             padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 8.0),
             child: TextField(
@@ -60,7 +57,6 @@ class _ClothingScreenState extends State<ClothingScreen> {
             ),
           ),
 
-          // --- Horizontal Categories ---
           SizedBox(
             height: 60,
             child: ListView.builder(
@@ -112,12 +108,10 @@ class _ClothingScreenState extends State<ClothingScreen> {
             ),
           ),
 
-          // --- Products Grid Display ---
           Expanded(
             child: FutureBuilder<List<ProductModel>>(
               future: _productsFuture,
               builder: (context, snapshot) {
-                // State A: Loading data from server
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(
                     child: CircularProgressIndicator(
@@ -126,15 +120,12 @@ class _ClothingScreenState extends State<ClothingScreen> {
                   );
                 }
 
-                // State B: Network or Parsing Error occurred
                 if (snapshot.hasError) {
                   return _buildErrorState(snapshot.error.toString());
                 }
 
-                // Get master list fetched from backend
                 final masterProducts = snapshot.data ?? [];
 
-                // 4. Apply your search & filtering logic locally to the incoming network array
                 final filteredProducts = masterProducts.where((product) {
                   final matchesSearch = product.name.toLowerCase().contains(
                     _searchQuery.toLowerCase(),
@@ -146,12 +137,10 @@ class _ClothingScreenState extends State<ClothingScreen> {
                   return matchesSearch && matchesCategory;
                 }).toList();
 
-                // State C: Successful data retrieved, check if filtered sublist is empty
                 if (filteredProducts.isEmpty) {
                   return _buildEmptyState();
                 }
 
-                // State D: Populate grid items
                 return GridView.builder(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 8.0,
@@ -213,7 +202,6 @@ class _ClothingScreenState extends State<ClothingScreen> {
     );
   }
 
-  // Bonus: Nice UI layout if the ngrok tunnel crashes or falls offline
   Widget _buildErrorState(String message) {
     return Center(
       child: Padding(

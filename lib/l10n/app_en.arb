@@ -1,0 +1,14 @@
+{
+    "@@locale": "en",
+    "navBarHome": "Home",
+    "newArrivals": "New Arrivals",
+    "trendingNow": "Trending Now",
+    "clothing": "Clothing",
+    "cart": "Cart",
+    "profile": "Profile",
+    "discountAds": "Get Up to 30% OFF",
+    "explore": "Explore",
+    "emptyCart": "Your cart is empty!",
+    "addClothesEmptyCartText": "Add some items to get started.",
+    "createAccount": "Create Account"
+}

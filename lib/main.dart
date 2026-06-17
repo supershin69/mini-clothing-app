@@ -1,5 +1,7 @@
+import 'package:clothing_shop/l10n/app_localizations.dart';
 import 'package:clothing_shop/main_wrapper.dart';
 import 'package:clothing_shop/state/cart_provider.dart';
+import 'package:clothing_shop/state/language_provider.dart';
 import 'package:clothing_shop/state/navigation_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -10,6 +12,7 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (context) => CartProvider()),
         ChangeNotifierProvider(create: (context) => NavigationProvider()),
+        ChangeNotifierProvider(create: (context) => LanguageProvider()),
       ],
       child: const MyApp(),
     ),
@@ -21,9 +24,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final langProvider = Provider.of<LanguageProvider>(context);
     return MaterialApp(
       title: 'Vibe Clothing Shop',
       debugShowCheckedModeBanner: false,
+
+      locale: langProvider.currentLocale,
+      supportedLocales: AppLocalizations.supportedLocales,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
 
       theme: ThemeData(
         scaffoldBackgroundColor: const Color(0xFFF8F9FA),

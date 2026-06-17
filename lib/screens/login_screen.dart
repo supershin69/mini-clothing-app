@@ -3,13 +3,12 @@ import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
   final VoidCallback onLoginSuccess;
-  final VoidCallback
-  onGoToRegister; // ✅ Register ဘက်ကူးဖို့ အကြောင်းကြားမည့် Callback
+  final VoidCallback onGoToRegister;
 
   const LoginScreen({
     super.key,
     required this.onLoginSuccess,
-    required this.onGoToRegister, // ✅ Constructor ထဲထည့်ပေးပါ
+    required this.onGoToRegister,
   });
 
   @override
@@ -160,8 +159,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(height: 16),
 
                   TextButton(
-                    onPressed: widget
-                        .onGoToRegister, // ✅ Navigator သုံးမယ့်အစား Callback ကို ခေါ်လိုက်တာပါ
+                    onPressed: widget.onGoToRegister,
                     style: TextButton.styleFrom(
                       foregroundColor: Theme.of(context).primaryColor,
                     ),
