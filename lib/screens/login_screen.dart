@@ -20,7 +20,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  final ApiService _apiService = ApiService();
+  late final ApiService _apiService;
   bool _isLoading = false;
 
   @override
@@ -28,6 +28,12 @@ class _LoginScreenState extends State<LoginScreen> {
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _apiService = ApiService(context);
   }
 
   void _handleLogin() async {

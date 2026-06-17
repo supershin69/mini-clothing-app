@@ -42,5 +42,8 @@
     "noOrderHistory": "You have no order history yet.",
     "order": "Order",
     "orderOn": "Order on",
-    "logout": "Logout"
+    "logout": "Logout",
+    "emailVerification": "Email Verification",
+    "verificationReqText": "Please type in the OTP we sent to your email, {email}.",
+    "verifyAndCreateAccount": "Verify & Create Account"
 }

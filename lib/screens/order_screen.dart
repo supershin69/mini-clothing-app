@@ -11,12 +11,13 @@ class OrderScreen extends StatefulWidget {
 }
 
 class _OrderScreenState extends State<OrderScreen> {
-  final ApiService _apiService = ApiService();
+  late final ApiService _apiService;
   late Future<List<OrderModel>> _ordersFuture;
 
   @override
   void initState() {
     super.initState();
+    _apiService = ApiService(context);
     _ordersFuture = _apiService.fetchUserOrders();
   }
 

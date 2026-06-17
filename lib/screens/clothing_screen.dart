@@ -13,7 +13,7 @@ class ClothingScreen extends StatefulWidget {
 }
 
 class _ClothingScreenState extends State<ClothingScreen> {
-  final ApiService _apiService = ApiService();
+  late final ApiService _apiService;
   late Future<List<ProductModel>> _productsFuture;
 
   String _searchQuery = '';
@@ -23,6 +23,7 @@ class _ClothingScreenState extends State<ClothingScreen> {
   @override
   void initState() {
     super.initState();
+    _apiService = ApiService(context);
     _productsFuture = _apiService.fetchProducts();
   }
 

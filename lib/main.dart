@@ -1,5 +1,6 @@
 import 'package:clothing_shop/l10n/app_localizations.dart';
 import 'package:clothing_shop/main_wrapper.dart';
+import 'package:clothing_shop/services/api_service.dart'; // 👈 ApiService ကို ဆွဲသွင်းရန် ထည့်ပေးပါ
 import 'package:clothing_shop/state/cart_provider.dart';
 import 'package:clothing_shop/state/language_provider.dart';
 import 'package:clothing_shop/state/navigation_provider.dart';
@@ -10,9 +11,18 @@ void main() {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => CartProvider()),
-        ChangeNotifierProvider(create: (context) => NavigationProvider()),
         ChangeNotifierProvider(create: (context) => LanguageProvider()),
+
+        ChangeNotifierProvider(create: (context) => NavigationProvider()),
+
+        ChangeNotifierProxyProvider<LanguageProvider, CartProvider>(
+          create: (context) => CartProvider(apiService: ApiService(context)),
+          update: (context, languageProvider, previousCartProvider) {
+            return (previousCartProvider ??
+                  CartProvider(apiService: ApiService(context)))
+              ..updateApiService(ApiService(context));
+          },
+        ),
       ],
       child: const MyApp(),
     ),
@@ -50,7 +60,6 @@ class MyApp extends StatelessWidget {
               error: Colors.redAccent,
             ),
 
-        // Centralized component theming
         disabledColor: Colors.grey,
         hintColor: Colors.grey,
         cardTheme: CardThemeData(

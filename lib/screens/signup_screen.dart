@@ -26,7 +26,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _confirmPasswordController = TextEditingController();
   final _otpController = TextEditingController();
 
-  final ApiService _apiService = ApiService();
+  late final ApiService _apiService;
   File? _imageFile;
   final ImagePicker _picker = ImagePicker();
 
@@ -43,6 +43,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
     _confirmPasswordController.dispose();
     _otpController.dispose();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _apiService = ApiService(context);
   }
 
   Future<void> _pickImage() async {
@@ -334,6 +340,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   Widget _buildOtpUI() {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -345,7 +352,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
         const SizedBox(height: 24),
         Text(
-          'Email Verification',
+          l10n.emailVerification,
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 24,
@@ -355,7 +362,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
         const SizedBox(height: 8),
         Text(
-          'မင်းရဲ့ Email (${_emailController.text}) ဆီကို ပို့လိုက်တဲ့ OTP ဂဏန်းကို ရိုက်ထည့်ပေးပါ',
+          l10n.verificationReqText(_emailController.text),
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 14,
@@ -399,8 +406,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     strokeWidth: 2,
                   ),
                 )
-              : const Text(
-                  'Verify & Create Account',
+              : Text(
+                  l10n.verifyAndCreateAccount,
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
         ),

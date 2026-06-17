@@ -1,16 +1,20 @@
 import 'package:clothing_shop/models/auth_models.dart';
 import 'package:clothing_shop/models/order_model.dart';
 import 'package:clothing_shop/models/product_model.dart';
+import 'package:clothing_shop/state/language_provider.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:provider/provider.dart';
 
 class ApiService {
-  final Dio _dio = Dio();
-  final _storage = const FlutterSecureStorage();
+  late final Dio _dio = Dio();
+  late final _storage = const FlutterSecureStorage();
+  final BuildContext context;
 
   final String baseUrl = 'https://clothing-store-api-vt3r.onrender.com';
 
-  ApiService() {
+  ApiService(this.context) {
     _dio.options.baseUrl = baseUrl;
     _dio.options.connectTimeout = const Duration(seconds: 50);
     _dio.options.receiveTimeout = const Duration(seconds: 50);
@@ -24,6 +28,14 @@ class ApiService {
     _dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
+          final langProvider = Provider.of<LanguageProvider>(
+            context,
+            listen: false,
+          );
+          final currentLanguage = langProvider.currentLocale.languageCode;
+
+          options.headers['Accept-Language'] = currentLanguage;
+
           String? token = await _storage.read(key: 'auth_token');
           if (token != null) {
             options.headers['Authorization'] = 'Bearer $token';

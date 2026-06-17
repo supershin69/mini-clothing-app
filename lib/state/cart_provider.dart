@@ -19,7 +19,14 @@ class CartItemModel {
 
 class CartProvider with ChangeNotifier {
   final Map<String, CartItemModel> _cartItems = {};
-  final ApiService _apiService = ApiService(); // Initialize API Service
+
+  ApiService _apiService;
+
+  CartProvider({required ApiService apiService}) : _apiService = apiService;
+
+  void updateApiService(ApiService newApiService) {
+    _apiService = newApiService;
+  }
 
   OrderModel? _lastPlacedOrder;
   OrderModel? get lastPlacedOrder => _lastPlacedOrder;

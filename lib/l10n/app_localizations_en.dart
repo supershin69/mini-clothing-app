@@ -136,4 +136,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get logout => 'Logout';
+
+  @override
+  String get emailVerification => 'Email Verification';
+
+  @override
+  String verificationReqText(Object email) {
+    return 'Please type in the OTP we sent to your email, $email.';
+  }
+
+  @override
+  String get verifyAndCreateAccount => 'Verify & Create Account';
 }

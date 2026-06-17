@@ -136,4 +136,15 @@ class AppLocalizationsMy extends AppLocalizations {
 
   @override
   String get logout => 'လော့ဂ်ေအောက်ထွက်ရန်';
+
+  @override
+  String get emailVerification => 'အီးမေးလ်အတည်ပြုခြင်း';
+
+  @override
+  String verificationReqText(Object email) {
+    return 'သင့်ရဲ့ အီးမေးလ် $email ဆီပို့လိုက်သော OTP ဂဏန်းရိုက်ထည့်ပေးပါ';
+  }
+
+  @override
+  String get verifyAndCreateAccount => 'အီးမေးလ် အတည်ပြုပြီး အကောင့်ဖွင့်ပါ';
 }

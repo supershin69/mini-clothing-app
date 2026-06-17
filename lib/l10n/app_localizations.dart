@@ -355,6 +355,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Logout'**
   String get logout;
+
+  /// No description provided for @emailVerification.
+  ///
+  /// In en, this message translates to:
+  /// **'Email Verification'**
+  String get emailVerification;
+
+  /// No description provided for @verificationReqText.
+  ///
+  /// In en, this message translates to:
+  /// **'Please type in the OTP we sent to your email, {email}.'**
+  String verificationReqText(Object email);
+
+  /// No description provided for @verifyAndCreateAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify & Create Account'**
+  String get verifyAndCreateAccount;
 }
 
 class _AppLocalizationsDelegate

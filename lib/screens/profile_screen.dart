@@ -16,13 +16,14 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  final ApiService _apiService = ApiService();
+  late final ApiService _apiService;
   final _storage = const FlutterSecureStorage();
   late Future<UserModel> _profileFuture;
 
   @override
   void initState() {
     super.initState();
+    _apiService = ApiService(context);
     _profileFuture = _fetchProfileAndCheckAuth();
   }
 
