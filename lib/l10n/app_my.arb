@@ -32,5 +32,7 @@
     "shippingFee": "Deli ခ",
     "totalPrice": "စုစုပေါင်း ကျသင့်ငွေ",
     "proceedToCheckout": "အော်ဒါတင်ရန်",
-    "orderSummary": "အော်ဒါအကျဉ်းချုပ်"
+    "orderSummary": "အော်ဒါအကျဉ်းချုပ်",
+    "noDescription": "ဤပစ္စည်းအတွက် ဖော်ပြချက်မရှိပါ",
+    "outOfStock": "ပစ္စည်းပြတ်နေသည်"
 }

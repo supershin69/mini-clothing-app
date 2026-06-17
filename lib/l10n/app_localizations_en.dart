@@ -106,4 +106,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get orderSummary => 'Order Summary';
+
+  @override
+  String get noDescription => 'No description available for this option.';
+
+  @override
+  String get outOfStock => 'OUT OF STOCK';
 }

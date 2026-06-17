@@ -295,6 +295,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Order Summary'**
   String get orderSummary;
+
+  /// No description provided for @noDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'No description available for this option.'**
+  String get noDescription;
+
+  /// No description provided for @outOfStock.
+  ///
+  /// In en, this message translates to:
+  /// **'OUT OF STOCK'**
+  String get outOfStock;
 }
 
 class _AppLocalizationsDelegate

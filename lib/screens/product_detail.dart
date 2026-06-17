@@ -1,3 +1,4 @@
+import 'package:clothing_shop/l10n/app_localizations.dart';
 import 'package:clothing_shop/state/cart_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -58,6 +59,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -132,7 +134,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         ),
                         const SizedBox(height: 24),
                         Text(
-                          "Select Size",
+                          l10n.selectSize,
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
@@ -143,7 +145,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         _buildSizeSection(),
                         const SizedBox(height: 28),
                         Text(
-                          "Description",
+                          l10n.description,
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
@@ -153,7 +155,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         const SizedBox(height: 8),
                         Text(
                           widget.product.description.isEmpty
-                              ? "No description available for this option."
+                              ? l10n.noDescription
                               : widget.product.description,
                           style: TextStyle(
                             fontSize: 14,
@@ -250,9 +252,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   }
 
   Widget _buildSizeSection() {
+    final l10n = AppLocalizations.of(context)!;
     if (_instockVariants.isEmpty) {
-      return const Text(
-        "OUT OF STOCK",
+      return Text(
+        l10n.outOfStock,
         style: TextStyle(
           color: Colors.red,
           fontWeight: FontWeight.bold,
@@ -304,6 +307,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   }
 
   Widget _buildAddToCartSection() {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: EdgeInsets.fromLTRB(
         20,
@@ -410,7 +414,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   ).disabledColor.withOpacity(0.3),
                 ),
                 child: Text(
-                  _instockVariants.isEmpty ? "OUT OF STOCK" : "ADD TO CART",
+                  _instockVariants.isEmpty ? l10n.outOfStock : l10n.addToCart,
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 15,

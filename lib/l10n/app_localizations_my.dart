@@ -106,4 +106,10 @@ class AppLocalizationsMy extends AppLocalizations {
 
   @override
   String get orderSummary => 'အော်ဒါအကျဉ်းချုပ်';
+
+  @override
+  String get noDescription => 'ဤပစ္စည်းအတွက် ဖော်ပြချက်မရှိပါ';
+
+  @override
+  String get outOfStock => 'ပစ္စည်းပြတ်နေသည်';
 }

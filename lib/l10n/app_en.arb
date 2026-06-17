@@ -32,5 +32,7 @@
     "shippingFee": "Shipping Fee",
     "totalPrice": "Total Price",
     "proceedToCheckout": "PROCEED TO CHECKOUT",
-    "orderSummary": "Order Summary"
+    "orderSummary": "Order Summary",
+    "noDescription": "No description available for this option.",
+    "outOfStock": "OUT OF STOCK"
 }
