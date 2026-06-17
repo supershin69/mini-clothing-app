@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:clothing_shop/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import '../services/api_service.dart';
@@ -162,12 +163,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   Widget _buildRegistrationFormUI() {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Text(
-          'Create Account',
+          l10n.createAccount,
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 28,

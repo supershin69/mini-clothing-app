@@ -1,0 +1,14 @@
+{
+    "@@locale": "my",
+    "navBarHome": "ပင်မ",
+    "newArrivals": "အသစ်ရောက်ရှိထားသည်များ",
+    "trendingNow": "ရေပန်းစားနေသော",
+    "clothing": "အ၀တ်",
+    "cart": "စျေးလှည်း",
+    "profile": "ပရိုဖိုင်",
+    "discountAds": "Discount 30% အထိ ရယူလိုက်ပါ",
+    "explore": "ကြည့်ရှုရန်",
+    "emptyCart": "စျေးလှည်းတွင် ဘာမှမရှိပါ",
+    "addClothesEmptyCartText": "စျေးလှည်းတွင်းသို့ ပစ္စည်းထည့်သွင်းပါ",
+    "createAccount": "အကောင့်ဖွင့်ပါ"
+}

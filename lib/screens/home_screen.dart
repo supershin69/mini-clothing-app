@@ -1,3 +1,4 @@
+import 'package:clothing_shop/l10n/app_localizations.dart';
 import 'package:clothing_shop/models/product_model.dart';
 import 'package:clothing_shop/widgets/product_section.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final trendingProducts = mockProducts.reversed.toList();
+    final l10n = AppLocalizations.of(context)!;
 
     return SingleChildScrollView(
       child: Column(
@@ -35,8 +37,8 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 4),
-                  const Text(
-                    "Get Up to 30% OFF",
+                  Text(
+                    l10n.discountAds,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 22,
@@ -53,7 +55,7 @@ class HomeScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                    child: const Text("Explore"),
+                    child: Text(l10n.explore),
                   ),
                 ],
               ),
@@ -61,7 +63,7 @@ class HomeScreen extends StatelessWidget {
           ),
 
           ProductSection(
-            title: "New Arrivals",
+            title: l10n.newArrivals,
             products: mockProducts,
             onSeeAllTap: () {
               print("Navigate to Shop Page from New Arrivals");
@@ -69,7 +71,7 @@ class HomeScreen extends StatelessWidget {
           ),
 
           ProductSection(
-            title: "Trending Now",
+            title: l10n.trendingNow,
             products: trendingProducts,
             onSeeAllTap: () {
               print("Navigate to Shop Page from Trending Now");

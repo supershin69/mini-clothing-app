@@ -1,3 +1,4 @@
+import 'package:clothing_shop/l10n/app_localizations.dart';
 import 'package:clothing_shop/screens/checkout_success_screen.dart';
 import 'package:clothing_shop/state/cart_provider.dart';
 import 'package:clothing_shop/models/order_model.dart';
@@ -382,6 +383,7 @@ class CartScreen extends StatelessWidget {
   }
 
   Widget _buildEmptyCart(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -393,7 +395,7 @@ class CartScreen extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            "Your cart is empty!",
+            l10n.emptyCart,
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
@@ -402,7 +404,7 @@ class CartScreen extends StatelessWidget {
           ),
           const SizedBox(height: 6),
           Text(
-            "Add some items to get started.",
+            l10n.addClothesEmptyCartText,
             style: TextStyle(color: Theme.of(context).disabledColor),
           ),
         ],
