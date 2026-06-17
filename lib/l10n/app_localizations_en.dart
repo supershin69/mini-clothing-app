@@ -150,4 +150,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get emptyClothingPage => 'No clothing found!';
+
+  @override
+  String get connectionError => 'Connection Error';
 }

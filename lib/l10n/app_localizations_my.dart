@@ -150,4 +150,7 @@ class AppLocalizationsMy extends AppLocalizations {
 
   @override
   String get emptyClothingPage => 'အ၀တ်အစားများ မတွေ့ပါ';
+
+  @override
+  String get connectionError => 'ဆက်သွယ်မှုပြတ်တောက်သွားပါသည်';
 }

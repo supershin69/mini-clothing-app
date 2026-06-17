@@ -211,8 +211,8 @@ class _ClothingScreenState extends State<ClothingScreen> {
     );
   }
 
-  // Error State (မူလအတိုင်း)
   Widget _buildErrorState(String message) {
+    final l10n = AppLocalizations.of(context)!;
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(24.0),
@@ -225,8 +225,8 @@ class _ClothingScreenState extends State<ClothingScreen> {
               color: Theme.of(context).colorScheme.error,
             ),
             const SizedBox(height: 12),
-            const Text(
-              "Connection Error",
+            Text(
+              l10n.connectionError,
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 4),
