@@ -58,7 +58,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     }
   }
 
-  // 📝 အဆင့် (၁) - အချက်အလက်များဖြင့် အကောင့်အရင်ဆောက်ပြီး OTP UI သို့ ကူးပြောင်းခြင်း
   void _submitRegistrationInfo() async {
     final name = _nameController.text.trim();
     final email = _emailController.text.trim();
@@ -85,7 +84,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     });
 
     try {
-      // 🚀 Backend Flow အသစ်အတိုင်း Register တန်းလုပ်လိုက်တာနဲ့ Server က OTP အလိုအလျောက် ပို့ပေးမှာပါ
       await _apiService.registerUser(
         name: name,
         email: email,
@@ -93,10 +91,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
         password: password,
       );
 
-      _showSnackBar('မင်းရဲ့ Gmail ထဲကို OTP ဂဏန်း ပို့ပေးလိုက်ပါပြီ');
+      _showSnackBar('သင့်ရဲ့ Gmail ထဲကို OTP ဂဏန်း ပို့ပေးလိုက်ပါပြီ');
 
       setState(() {
-        _isOtpStage = true; // ✨ အောင်မြင်ရင် OTP ရိုက်တဲ့ အဆင့်ကို ကူးလိုက်ပြီ!
+        _isOtpStage = true;
       });
     } catch (e) {
       _showSnackBar(e.toString().replaceAll('Exception:', ''));
@@ -107,7 +105,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     }
   }
 
-  // 🔑 အဆင့် (၂) - ရိုက်ထည့်လိုက်သော OTP ကို တိုက်ရိုက်ပို့စစ်ပြီး ပွဲသိမ်းခြင်း
   void _verifyOtpAndRegister() async {
     final email = _emailController.text.trim();
     final otp = _otpController.text.trim();
@@ -122,13 +119,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
     });
 
     try {
-      // Backend ရဲ့ /auth/verify-otp ဆီ ပို့စစ်တယ်
       bool isOtpValid = await _apiService.verifyOtp(email: email, otp: otp);
 
       if (isOtpValid) {
         _showSnackBar('အကောင့်ဖွင့်ခြင်း အောင်မြင်ပါသည်');
-        widget
-            .onRegisterSuccess(); // 🎉 ပွဲသိမ်းပြီ! App ထဲ တန်းဝင်ခိုင်းလိုက်မယ်
+        widget.onRegisterSuccess();
       } else {
         _showSnackBar(
           'OTP ဂဏန်း မှားယွင်းနေပါသည် သို့မဟုတ် သက်တမ်းကုန်ဆုံးသွားပါပြီ',
@@ -166,7 +161,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  // 📝 ရှေ့တန်း Form ဖြည့်ရမည့် UI (Step 1)
   Widget _buildRegistrationFormUI() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -191,7 +185,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
         const SizedBox(height: 24),
 
-        // Profile Image Picker (UI အလှအဖြစ် ခဏထားထားပေးပါတယ်)
         Center(
           child: Stack(
             children: [
@@ -338,7 +331,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  // 📧 Email Verification / OTP ရိုက်ရမည့် UI (Step 2)
   Widget _buildOtpUI() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,

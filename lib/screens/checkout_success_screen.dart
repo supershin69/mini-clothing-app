@@ -1,17 +1,16 @@
 import 'package:clothing_shop/state/navigation_provider.dart';
-import 'package:clothing_shop/models/order_model.dart'; // 💡 သေချာ import လုပ်ထားပါ
+import 'package:clothing_shop/models/order_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CheckoutSuccessScreen extends StatelessWidget {
-  final OrderModel orderData; // 💡 OrderModel ကို တိုက်ရိုက် လက်ခံထားပါတယ်
+  final OrderModel orderData;
 
   const CheckoutSuccessScreen({super.key, required this.orderData});
 
   @override
   Widget build(BuildContext context) {
-    final List<OrderLineModel> lines =
-        orderData.orderLines; // 💡 ကွက်တိ Type မိသွားပါပြီ
+    final List<OrderLineModel> lines = orderData.orderLines;
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
@@ -23,7 +22,6 @@ class CheckoutSuccessScreen extends StatelessWidget {
             children: [
               const Spacer(),
 
-              // --- 🎉 SUCCESS ICON ---
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
@@ -59,14 +57,12 @@ class CheckoutSuccessScreen extends StatelessWidget {
               const SizedBox(height: 32),
               const Divider(),
 
-              // --- 📦 ORDER SUMMARY DETAIL CARDS ---
               Expanded(
                 flex: 3,
                 child: ListView.builder(
                   itemCount: lines.length,
                   itemBuilder: (context, index) {
-                    final line =
-                        lines[index]; // 💡 line သည် OrderLineModel ဖြစ်သွားပါပြီ
+                    final line = lines[index];
 
                     return Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -78,7 +74,7 @@ class CheckoutSuccessScreen extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  line.productName, // 💡 Model ထဲကနေ တိုက်ရိုက်ဆွဲထုတ်ခေါ်ယူခြင်း
+                                  line.productName,
                                   style: const TextStyle(
                                     fontWeight: FontWeight.w600,
                                     fontSize: 14,
@@ -125,7 +121,7 @@ class CheckoutSuccessScreen extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      "\$${orderData.totalAmount.toStringAsFixed(2)}", // 💡 .totalAmount ကို တိုက်ရိုက်ခေါ်ခြင်း
+                      "\$${orderData.totalAmount.toStringAsFixed(2)}",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 20,
@@ -138,7 +134,6 @@ class CheckoutSuccessScreen extends StatelessWidget {
 
               const Spacer(),
 
-              // --- 🏠 RETURN TO HOME BUTTON ---
               SizedBox(
                 width: double.infinity,
                 height: 50,

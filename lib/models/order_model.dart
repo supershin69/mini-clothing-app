@@ -3,7 +3,7 @@ class OrderModel {
   final double totalAmount;
   final String status;
   final DateTime createdAt;
-  final List<OrderLineModel> orderLines; // 💡 ဒီလမ်းကြောင်း တိုးပေးလိုက်ပါတယ်!
+  final List<OrderLineModel> orderLines;
 
   OrderModel({
     required this.id,
@@ -14,7 +14,6 @@ class OrderModel {
   });
 
   factory OrderModel.fromJson(Map<String, dynamic> json) {
-    // order_lines Array ကို ကာကွယ်ပြီး Parse လုပ်ခြင်း
     var list = json['order_lines'] as List? ?? [];
     List<OrderLineModel> linesList = list
         .map((i) => OrderLineModel.fromJson(i))
@@ -33,7 +32,6 @@ class OrderModel {
   }
 }
 
-// 💡 Prisma Schema ရဲ့ Relation တွေအတိုင်း ဒေတာဆွဲထုတ်ပေးမယ့် Nested Model
 class OrderLineModel {
   final String id;
   final int quantity;
@@ -50,7 +48,6 @@ class OrderLineModel {
   });
 
   factory OrderLineModel.fromJson(Map<String, dynamic> json) {
-    // Prisma ရဲ့ include: { variant: { include: { product: true } } } ဒေတာတွေကို လှမ်းဖတ်ခြင်း
     final variant = json['variant'] as Map<String, dynamic>? ?? {};
     final product = variant['product'] as Map<String, dynamic>? ?? {};
 
@@ -59,7 +56,7 @@ class OrderLineModel {
       quantity: json['quantity'] ?? 1,
       price: double.tryParse(json['price']?.toString() ?? '0.0') ?? 0.0,
       productName: product['name'] ?? 'Unknown Product',
-      // Prisma Variant ထဲမှာ size ကျန်ခဲ့ရင် color ကို ယူမယ်၊ မရှိရင် N/A ပြမယ်
+
       selectedSize: variant['size'] ?? variant['color'] ?? 'N/A',
     );
   }

@@ -19,7 +19,6 @@ class _OrderScreenState extends State<OrderScreen> {
     _ordersFuture = _apiService.fetchUserOrders();
   }
 
-  // Helper method to map Prisma OrderStatus enums to UI Colors
   Color _getStatusColor(String status) {
     switch (status.toUpperCase()) {
       case 'PENDING':
@@ -35,7 +34,6 @@ class _OrderScreenState extends State<OrderScreen> {
     }
   }
 
-  // Helper method to format DateTime without needing external packages
   String _formatDate(DateTime date) {
     const months = [
       'Jan',
@@ -79,7 +77,6 @@ class _OrderScreenState extends State<OrderScreen> {
             );
           }
 
-          // ❌ Error State
           if (snapshot.hasError) {
             return Center(
               child: Padding(
@@ -95,7 +92,7 @@ class _OrderScreenState extends State<OrderScreen> {
 
           final orders = snapshot.data ?? [];
 
-          // 📭 Empty State
+          // Empty State
           if (orders.isEmpty) {
             return Center(
               child: Text(
@@ -108,7 +105,7 @@ class _OrderScreenState extends State<OrderScreen> {
             );
           }
 
-          // ✅ Success State: Render List
+          // Success State: Render List
           return Padding(
             padding: const EdgeInsets.all(20.0),
             child: ListView.builder(
@@ -116,7 +113,7 @@ class _OrderScreenState extends State<OrderScreen> {
               itemBuilder: (context, index) {
                 final order = orders[index];
 
-                // Show short ID to keep UI clean (e.g., first 8 characters of CUID)
+                // Show short ID
                 final shortId = order.id.length > 8
                     ? order.id.substring(0, 8)
                     : order.id;

@@ -41,7 +41,7 @@ class ApiService {
     );
   }
 
-  // 🚀 ၁။ Register User API (Backend စနစ်သစ်နှင့်အညီ JSON ပုံစံဖြင့် အကောင့်တန်းဆောက်သည်)
+  // ၁။ Register User API
   Future<void> registerUser({
     required String name,
     required String email,
@@ -49,7 +49,6 @@ class ApiService {
     required String password,
   }) async {
     try {
-      // Backend ရဲ့ RegisterDto တောင်းဆိုချက်အတိုင်း JSON data ပို့ပေးခြင်း
       final response = await _dio.post(
         '/auth/register',
         data: {
@@ -61,20 +60,20 @@ class ApiService {
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        print("✅ Register Success: OTP sent to email automatically.");
-        return; // Server က Token ပြန်မပေးသေးသောကြောင့် void အနေဖြင့်သာ ပြန်ပါသည်
+        print(" uccess: OTP sent to email automatically.");
+        return;
       } else {
         throw Exception('Failed to register user');
       }
     } on DioException catch (e) {
-      print("❌ Dio Error Response: ${e.response?.data}");
+      print("Dio Error Response: ${e.response?.data}");
       throw Exception(e.response?.data['message'] ?? 'Dio error: ${e.message}');
     } catch (e) {
       throw Exception('Unexpected error: $e');
     }
   }
 
-  // 🔑 ၂။ Verify OTP API (ရိုက်ထည့်လိုက်သော OTP ဂဏန်း ၆ လုံးကို စစ်ဆေးသည်)
+  // ၂။ Verify OTP API
   Future<bool> verifyOtp({required String email, required String otp}) async {
     try {
       final response = await _dio.post(
@@ -83,12 +82,12 @@ class ApiService {
       );
       return response.statusCode == 200 || response.statusCode == 201;
     } catch (e) {
-      print("❌ verifyOtp Error: $e");
+      print("verifyOtp Error: $e");
       return false;
     }
   }
 
-  // 🔐 ၃။ Login User API
+  // ၃။ Login User API
   Future<AuthResponseModel> loginUser({
     required String email,
     required String password,
@@ -111,17 +110,17 @@ class ApiService {
         throw Exception('Failed to login user');
       }
     } on DioException catch (e) {
-      print("❌ Dio Error Response: ${e.response?.data}");
+      print("Dio Error Response: ${e.response?.data}");
       throw Exception(e.response?.data['message'] ?? 'Dio error: ${e.message}');
     } catch (e) {
       throw Exception('Unexpected error: $e');
     }
   }
 
-  // 🛍️ ၄။ Fetch Products API
+  // ၄။ Fetch Products API
   Future<List<ProductModel>> fetchProducts() async {
     try {
-      print("🚀 Calling API: ${_dio.options.baseUrl}/products");
+      print("Calling API: ${_dio.options.baseUrl}/products");
       final response = await _dio.get('/products');
       if (response.statusCode == 200) {
         final List<dynamic> data = response.data;
@@ -130,19 +129,19 @@ class ApiService {
         throw Exception('Failed to load products');
       }
     } on DioException catch (e) {
-      print("❌ Dio Error Response: ${e.response?.data}");
+      print("Dio Error Response: ${e.response?.data}");
       throw Exception('Dio error: ${e.message}');
     } catch (e) {
       throw Exception('Unexpected error: $e');
     }
   }
 
-  // 🚪 ၅။ Logout User API
+  // ၅။ Logout User API
   Future<void> logoutUser() async {
     await _storage.delete(key: 'auth_token');
   }
 
-  // 👤 ၆။ Fetch User Profile API
+  // ၆။ Fetch User Profile API
   Future<UserModel> fetchUserProfile() async {
     try {
       final response = await _dio.get('/auth/profile');
@@ -153,36 +152,35 @@ class ApiService {
         throw Exception('Failed to load user profile');
       }
     } on DioException catch (e) {
-      print("❌ Dio Error Response: ${e.response?.data}");
+      print("Dio Error Response: ${e.response?.data}");
       throw Exception('Dio error: ${e.message}');
     } catch (e) {
       throw Exception('Unexpected error: $e');
     }
   }
 
-  // 🛒 ၇။ Create Order (Checkout) API - Updated for the new JSON schema
+  // ၇။ Create Order (Checkout) API - Updated for the new JSON schema
   Future<Map<String, dynamic>> createOrder({
     required List<Map<String, dynamic>> items,
   }) async {
     try {
-      // Constructs exactly: { "items": [ { "variant_id": "...", "quantity": 1 } ] }
       final response = await _dio.post('/orders', data: {'items': items});
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        print("✅ Order Placed Successfully on Backend.");
+        print("Order Placed Successfully on Backend.");
         return response.data as Map<String, dynamic>;
       } else {
         throw Exception('Failed to place order');
       }
     } on DioException catch (e) {
-      print("❌ Dio Error Response: ${e.response?.data}");
+      print("Dio Error Response: ${e.response?.data}");
       throw Exception(e.response?.data['message'] ?? 'Dio error: ${e.message}');
     } catch (e) {
       throw Exception('Unexpected error: $e');
     }
   }
 
-  // 📦 ၈။ Fetch User Orders API
+  // ၈။ Fetch User Orders API
   Future<List<OrderModel>> fetchUserOrders() async {
     try {
       // The backend should know which user to fetch orders for based on the Bearer Token
@@ -195,7 +193,7 @@ class ApiService {
         throw Exception('Failed to load orders');
       }
     } on DioException catch (e) {
-      print("❌ Dio Error Response: ${e.response?.data}");
+      print("Dio Error Response: ${e.response?.data}");
       throw Exception(e.response?.data['message'] ?? 'Dio error: ${e.message}');
     } catch (e) {
       throw Exception('Unexpected error: $e');

@@ -177,7 +177,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     );
   }
 
-  // Restored and fixed missing function declaration from copy-paste error
   Widget _buildImageSection(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
 

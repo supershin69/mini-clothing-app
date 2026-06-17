@@ -4,7 +4,7 @@ import 'package:clothing_shop/screens/home_screen.dart';
 import 'package:clothing_shop/screens/login_screen.dart';
 import 'package:clothing_shop/screens/profile_screen.dart';
 import 'package:clothing_shop/screens/signup_screen.dart';
-import 'package:clothing_shop/state/navigation_provider.dart'; // ✅ Import
+import 'package:clothing_shop/state/navigation_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
@@ -36,8 +36,7 @@ class _MainWrapperState extends State<MainWrapper> {
 
   @override
   Widget build(BuildContext context) {
-    final navigationProvider = context
-        .watch<NavigationProvider>(); // ✅ Watch state
+    final navigationProvider = context.watch<NavigationProvider>();
     Widget profileTab;
 
     if (_isLoggedIn) {
@@ -91,14 +90,12 @@ class _MainWrapperState extends State<MainWrapper> {
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
       ),
-      body:
-          screens[navigationProvider
-              .currentIndex], // ✅ Dynamic index via provider
+      body: screens[navigationProvider.currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: navigationProvider.currentIndex,
         type: BottomNavigationBarType.fixed,
         onTap: (index) {
-          navigationProvider.changeTab(index); // ✅ Change tab via provider
+          navigationProvider.changeTab(index);
         },
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),

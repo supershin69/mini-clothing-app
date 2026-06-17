@@ -1,6 +1,6 @@
 import 'package:clothing_shop/screens/checkout_success_screen.dart';
 import 'package:clothing_shop/state/cart_provider.dart';
-import 'package:clothing_shop/models/order_model.dart'; // 💡 OrderModel Type ကို သေချာသိအောင် တစ်ခါတည်း import ထည့်ထားပေးပါတယ်
+import 'package:clothing_shop/models/order_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -14,7 +14,7 @@ class CartScreen extends StatelessWidget {
       body: Consumer<CartProvider>(
         builder: (context, cartProvider, child) {
           if (cartProvider.cartItems.isEmpty) {
-            return _buildEmptyCart(context); // Passed context here
+            return _buildEmptyCart(context);
           }
 
           return Column(
@@ -42,7 +42,6 @@ class CartScreen extends StatelessWidget {
                             ),
                             child: Row(
                               children: [
-                                // --- 🖼️ IMAGE WITH ERROR & LOADING BUILDER ---
                                 ClipRRect(
                                   borderRadius: BorderRadius.circular(8),
                                   child: Image.network(
@@ -95,7 +94,6 @@ class CartScreen extends StatelessWidget {
                                 ),
                                 const SizedBox(width: 16),
 
-                                // --- 📝 PRODUCT DETAILS ---
                                 Expanded(
                                   child: Column(
                                     crossAxisAlignment:
@@ -132,7 +130,6 @@ class CartScreen extends StatelessWidget {
                                   ),
                                 ),
 
-                                // --- 🗑️ DELETE & QUANTITY CONTROLLER ---
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
@@ -263,7 +260,6 @@ class CartScreen extends StatelessWidget {
                 ),
               ),
 
-              // --- 🛒 CHECKOUT BUTTON SECTION ---
               Container(
                 padding: EdgeInsets.fromLTRB(
                   16,
@@ -307,7 +303,6 @@ class CartScreen extends StatelessWidget {
                       }
 
                       if (success && context.mounted) {
-                        // 💡 liveOrderData ရဲ့ Type ကို OrderModel ဖြစ်ကြောင်း သေချာအောင် သတ်မှတ်ပေးလိုက်ပါတယ်
                         final OrderModel? liveOrderData =
                             provider.lastPlacedOrder;
 
@@ -316,8 +311,7 @@ class CartScreen extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                               builder: (context) => CheckoutSuccessScreen(
-                                orderData:
-                                    liveOrderData, // 🚀 အောင်မြင်စွာ ပါးလိုက်ပါပြီ
+                                orderData: liveOrderData,
                               ),
                             ),
                           );
@@ -354,7 +348,6 @@ class CartScreen extends StatelessWidget {
     );
   }
 
-  // Required 'BuildContext context' parameter added here
   Widget _buildPriceRow(
     BuildContext context,
     String label,
@@ -388,7 +381,6 @@ class CartScreen extends StatelessWidget {
     );
   }
 
-  // Required 'BuildContext context' parameter added here
   Widget _buildEmptyCart(BuildContext context) {
     return Center(
       child: Column(
