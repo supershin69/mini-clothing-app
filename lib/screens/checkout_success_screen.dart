@@ -1,3 +1,4 @@
+import 'package:clothing_shop/l10n/app_localizations.dart';
 import 'package:clothing_shop/state/navigation_provider.dart';
 import 'package:clothing_shop/models/order_model.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ class CheckoutSuccessScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<OrderLineModel> lines = orderData.orderLines;
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
@@ -38,7 +40,7 @@ class CheckoutSuccessScreen extends StatelessWidget {
               ),
               const SizedBox(height: 24),
               Text(
-                "Order Placed Successfully!",
+                l10n.checkoutSuccess,
                 style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
@@ -84,7 +86,7 @@ class CheckoutSuccessScreen extends StatelessWidget {
                                 ),
                                 const SizedBox(height: 2),
                                 Text(
-                                  "Size: ${line.selectedSize}  x${line.quantity}",
+                                  "${l10n.size}: ${line.selectedSize}  x${line.quantity}",
                                   style: const TextStyle(
                                     color: Colors.grey,
                                     fontSize: 12,
@@ -113,8 +115,8 @@ class CheckoutSuccessScreen extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
-                      "Total Paid",
+                    Text(
+                      l10n.totalPrice,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
@@ -148,8 +150,8 @@ class CheckoutSuccessScreen extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Theme.of(context).primaryColor,
                   ),
-                  child: const Text(
-                    "RETURN TO HOME",
+                  child: Text(
+                    l10n.returnHome,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 14,

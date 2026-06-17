@@ -34,5 +34,13 @@
     "proceedToCheckout": "PROCEED TO CHECKOUT",
     "orderSummary": "Order Summary",
     "noDescription": "No description available for this option.",
-    "outOfStock": "OUT OF STOCK"
+    "outOfStock": "OUT OF STOCK",
+    "checkoutSuccess": "Order Placed Successfully!",
+    "returnHome": "RETURN TO HOME",
+    "myOrders": "My Orders",
+    "errorLoadingOrders": "Error loading orders",
+    "noOrderHistory": "You have no order history yet.",
+    "order": "Order",
+    "orderOn": "Order on",
+    "logout": "Logout"
 }

@@ -34,5 +34,13 @@
     "proceedToCheckout": "အော်ဒါတင်ရန်",
     "orderSummary": "အော်ဒါအကျဉ်းချုပ်",
     "noDescription": "ဤပစ္စည်းအတွက် ဖော်ပြချက်မရှိပါ",
-    "outOfStock": "ပစ္စည်းပြတ်နေသည်"
+    "outOfStock": "ပစ္စည်းပြတ်နေသည်",
+    "checkoutSuccess": "အော်ဒါတင်ပြီးပါပြီ",
+    "returnHome": "ပင်မစာမျက်နှာသို့ပြန်ရန်",
+    "myOrders": "ကျွန်ုပ်၏ အော်ဒါများ",
+    "errorLoadingOrders": "အော်ဒါဆွဲရာတွင် အမှားအယွင်း ဖြစ်နေသည်",
+    "noOrderHistory": "အော်ဒါမရှိသေးပါ",
+    "order": "အော်ဒါ",
+    "orderOn": "နေ့စွဲ",
+    "logout": "လော့ဂ်ေအောက်ထွက်ရန်"
 }

@@ -1,3 +1,4 @@
+import 'package:clothing_shop/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import '../models/order_model.dart';
 import '../services/api_service.dart';
@@ -54,11 +55,12 @@ class _OrderScreenState extends State<OrderScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text(
-          'My Orders',
+        title: Text(
+          l10n.myOrders,
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.transparent,
@@ -68,7 +70,6 @@ class _OrderScreenState extends State<OrderScreen> {
       body: FutureBuilder<List<OrderModel>>(
         future: _ordersFuture,
         builder: (context, snapshot) {
-          // ⏳ Loading State
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
               child: CircularProgressIndicator(
@@ -82,7 +83,7 @@ class _OrderScreenState extends State<OrderScreen> {
               child: Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Text(
-                  'Error loading orders:\n${snapshot.error}',
+                  '${l10n.errorLoadingOrders}:\n${snapshot.error}',
                   textAlign: TextAlign.center,
                   style: TextStyle(color: Theme.of(context).colorScheme.error),
                 ),
@@ -96,7 +97,7 @@ class _OrderScreenState extends State<OrderScreen> {
           if (orders.isEmpty) {
             return Center(
               child: Text(
-                'You have no order history yet.',
+                l10n.noOrderHistory,
                 style: TextStyle(
                   fontSize: 16,
                   color: Theme.of(context).disabledColor,
@@ -138,11 +139,11 @@ class _OrderScreenState extends State<OrderScreen> {
                       ),
                     ),
                     title: Text(
-                      'Order #$shortId',
+                      '${l10n.order} #$shortId',
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                     subtitle: Text(
-                      'Ordered on: ${_formatDate(order.createdAt)}',
+                      '${l10n.orderOn}: ${_formatDate(order.createdAt)}',
                     ),
                     trailing: Column(
                       mainAxisAlignment: MainAxisAlignment.center,

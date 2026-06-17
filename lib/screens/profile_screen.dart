@@ -1,3 +1,4 @@
+import 'package:clothing_shop/l10n/app_localizations.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../models/auth_models.dart';
@@ -45,6 +46,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: FutureBuilder<UserModel>(
@@ -131,8 +133,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             Icons.shopping_bag_outlined,
                             color: Theme.of(context).primaryColor,
                           ),
-                          title: const Text(
-                            'Your Orders',
+                          title: Text(
+                            l10n.myOrders,
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           trailing: Icon(
@@ -155,7 +157,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             color: Theme.of(context).colorScheme.error,
                           ),
                           title: Text(
-                            'Logout',
+                            l10n.logout,
                             style: TextStyle(
                               color: Theme.of(context).colorScheme.error,
                               fontWeight: FontWeight.bold,

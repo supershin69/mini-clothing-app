@@ -112,4 +112,28 @@ class AppLocalizationsMy extends AppLocalizations {
 
   @override
   String get outOfStock => 'ပစ္စည်းပြတ်နေသည်';
+
+  @override
+  String get checkoutSuccess => 'အော်ဒါတင်ပြီးပါပြီ';
+
+  @override
+  String get returnHome => 'ပင်မစာမျက်နှာသို့ပြန်ရန်';
+
+  @override
+  String get myOrders => 'ကျွန်ုပ်၏ အော်ဒါများ';
+
+  @override
+  String get errorLoadingOrders => 'အော်ဒါဆွဲရာတွင် အမှားအယွင်း ဖြစ်နေသည်';
+
+  @override
+  String get noOrderHistory => 'အော်ဒါမရှိသေးပါ';
+
+  @override
+  String get order => 'အော်ဒါ';
+
+  @override
+  String get orderOn => 'နေ့စွဲ';
+
+  @override
+  String get logout => 'လော့ဂ်ေအောက်ထွက်ရန်';
 }

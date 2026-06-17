@@ -112,4 +112,28 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get outOfStock => 'OUT OF STOCK';
+
+  @override
+  String get checkoutSuccess => 'Order Placed Successfully!';
+
+  @override
+  String get returnHome => 'RETURN TO HOME';
+
+  @override
+  String get myOrders => 'My Orders';
+
+  @override
+  String get errorLoadingOrders => 'Error loading orders';
+
+  @override
+  String get noOrderHistory => 'You have no order history yet.';
+
+  @override
+  String get order => 'Order';
+
+  @override
+  String get orderOn => 'Order on';
+
+  @override
+  String get logout => 'Logout';
 }
