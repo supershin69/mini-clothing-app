@@ -147,4 +147,7 @@ class AppLocalizationsMy extends AppLocalizations {
 
   @override
   String get verifyAndCreateAccount => 'အီးမေးလ် အတည်ပြုပြီး အကောင့်ဖွင့်ပါ';
+
+  @override
+  String get emptyClothingPage => 'အ၀တ်အစားများ မတွေ့ပါ';
 }

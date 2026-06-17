@@ -147,4 +147,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get verifyAndCreateAccount => 'Verify & Create Account';
+
+  @override
+  String get emptyClothingPage => 'No clothing found!';
 }

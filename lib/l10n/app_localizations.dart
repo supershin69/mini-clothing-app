@@ -373,6 +373,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Verify & Create Account'**
   String get verifyAndCreateAccount;
+
+  /// No description provided for @emptyClothingPage.
+  ///
+  /// In en, this message translates to:
+  /// **'No clothing found!'**
+  String get emptyClothingPage;
 }
 
 class _AppLocalizationsDelegate

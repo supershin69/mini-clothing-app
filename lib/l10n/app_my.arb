@@ -45,5 +45,6 @@
     "logout": "လော့ဂ်ေအောက်ထွက်ရန်",
     "emailVerification": "အီးမေးလ်အတည်ပြုခြင်း",
     "verificationReqText": "သင့်ရဲ့ အီးမေးလ် {email} ဆီပို့လိုက်သော OTP ဂဏန်းရိုက်ထည့်ပေးပါ",
-    "verifyAndCreateAccount": "အီးမေးလ် အတည်ပြုပြီး အကောင့်ဖွင့်ပါ"
+    "verifyAndCreateAccount": "အီးမေးလ် အတည်ပြုပြီး အကောင့်ဖွင့်ပါ",
+    "emptyClothingPage": "အ၀တ်အစားများ မတွေ့ပါ"
 }

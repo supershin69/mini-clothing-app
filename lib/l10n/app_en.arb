@@ -45,5 +45,6 @@
     "logout": "Logout",
     "emailVerification": "Email Verification",
     "verificationReqText": "Please type in the OTP we sent to your email, {email}.",
-    "verifyAndCreateAccount": "Verify & Create Account"
+    "verifyAndCreateAccount": "Verify & Create Account",
+    "emptyClothingPage": "No clothing found!"
 }
