@@ -1,6 +1,7 @@
 import 'package:clothing_shop/l10n/app_localizations.dart';
 import 'package:clothing_shop/state/navigation_provider.dart';
 import 'package:clothing_shop/models/order_model.dart';
+import 'package:clothing_shop/utils/string_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -86,7 +87,7 @@ class CheckoutSuccessScreen extends StatelessWidget {
                                 ),
                                 const SizedBox(height: 2),
                                 Text(
-                                  "${l10n.size}: ${line.selectedSize}  x${line.quantity}",
+                                  "${l10n.size}: ${line.selectedSize}  x${line.quantity.toString().toLocalizedNum(context)}",
                                   style: const TextStyle(
                                     color: Colors.grey,
                                     fontSize: 12,
@@ -96,7 +97,8 @@ class CheckoutSuccessScreen extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            "\$${(line.price * line.quantity).toStringAsFixed(2)}",
+                            "\$${(line.price * line.quantity).toStringAsFixed(2)}"
+                                .toLocalizedNum(context),
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 14,
@@ -123,7 +125,8 @@ class CheckoutSuccessScreen extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      "\$${orderData.totalAmount.toStringAsFixed(2)}",
+                      "\$${orderData.totalAmount.toStringAsFixed(2)}"
+                          .toLocalizedNum(context),
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 20,

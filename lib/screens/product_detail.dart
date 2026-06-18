@@ -1,5 +1,6 @@
 import 'package:clothing_shop/l10n/app_localizations.dart';
 import 'package:clothing_shop/state/cart_provider.dart';
+import 'package:clothing_shop/utils/string_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -53,13 +54,15 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
     setState(() {
       _quantity = newQuantity;
-      _quantityController.text = _quantity.toString();
+      _quantityController.text = _quantity.toString().toLocalizedNum(context);
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    _quantityController.text = _quantity.toString().toLocalizedNum(context);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -123,7 +126,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                             ),
                             const SizedBox(width: 16),
                             Text(
-                              "\$${widget.product.price.toStringAsFixed(2)}",
+                              "\$${widget.product.price.toStringAsFixed(2)}"
+                                  .toLocalizedNum(context),
                               style: TextStyle(
                                 fontSize: 22,
                                 fontWeight: FontWeight.w400,
@@ -347,21 +351,53 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   width: 40,
                   child: TextField(
                     controller: _quantityController,
-                    keyboardType: TextInputType.number,
+                    keyboardType: TextInputType.text,
                     textAlign: TextAlign.center,
                     maxLines: 1,
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 15,
                     ),
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    //inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     decoration: const InputDecoration(
                       border: InputBorder.none,
                       contentPadding: EdgeInsets.zero,
                       isDense: true,
                     ),
                     onChanged: (val) {
-                      final int? parsed = int.tryParse(val);
+                      String cleanVal = val;
+                      const myanmarDigits = [
+                        '၀',
+                        '၁',
+                        '၂',
+                        '၃',
+                        '၄',
+                        '၅',
+                        '၆',
+                        '၇',
+                        '၈',
+                        '၉',
+                      ];
+                      const englishDigits = [
+                        '0',
+                        '1',
+                        '2',
+                        '3',
+                        '4',
+                        '5',
+                        '6',
+                        '7',
+                        '8',
+                        '9',
+                      ];
+                      for (int i = 0; i < 10; i++) {
+                        cleanVal = cleanVal.replaceAll(
+                          myanmarDigits[i],
+                          englishDigits[i],
+                        );
+                      }
+
+                      final int? parsed = int.tryParse(cleanVal);
                       if (parsed != null) {
                         _quantity = parsed;
                       } else if (val.isEmpty) {
@@ -369,7 +405,38 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       }
                     },
                     onSubmitted: (val) {
-                      final int? parsed = int.tryParse(val);
+                      String cleanVal = val;
+                      const myanmarDigits = [
+                        '၀',
+                        '၁',
+                        '၂',
+                        '၃',
+                        '၄',
+                        '၅',
+                        '၆',
+                        '၇',
+                        '၈',
+                        '၉',
+                      ];
+                      const englishDigits = [
+                        '0',
+                        '1',
+                        '2',
+                        '3',
+                        '4',
+                        '5',
+                        '6',
+                        '7',
+                        '8',
+                        '9',
+                      ];
+                      for (int i = 0; i < 10; i++) {
+                        cleanVal = cleanVal.replaceAll(
+                          myanmarDigits[i],
+                          englishDigits[i],
+                        );
+                      }
+                      final int? parsed = int.tryParse(cleanVal);
                       _updateQuantity(parsed ?? 1);
                     },
                   ),
@@ -398,12 +465,17 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                           listen: false,
                         ).addItem(widget.product, _selectedSize!, _quantity);
 
+                        final isMyanmar =
+                            Localizations.localeOf(context).languageCode ==
+                            'my';
+                        final successMessage = isMyanmar
+                            ? "${widget.product.name} (${_selectedSize!.toLocalizedNum(context)}) အရေအတွက် (${_quantity.toString().toLocalizedNum(context)}) ခုကို ခြင်းတောင်းထဲ ထည့်ပြီးပါပြီ။"
+                            : "Added $_quantity x ${widget.product.name} ($_selectedSize) to cart!";
+
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             backgroundColor: Theme.of(context).primaryColor,
-                            content: Text(
-                              "Added $_quantity x ${widget.product.name} ($_selectedSize) to cart!",
-                            ),
+                            content: Text(successMessage),
                             duration: const Duration(seconds: 2),
                           ),
                         );

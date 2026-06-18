@@ -2,6 +2,7 @@ import 'package:clothing_shop/l10n/app_localizations.dart';
 import 'package:clothing_shop/screens/checkout_success_screen.dart';
 import 'package:clothing_shop/state/cart_provider.dart';
 import 'package:clothing_shop/models/order_model.dart';
+import 'package:clothing_shop/utils/string_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -112,7 +113,7 @@ class CartScreen extends StatelessWidget {
                                       ),
                                       const SizedBox(height: 4),
                                       Text(
-                                        "${l10n.size}: ${item.selectedSize}",
+                                        "${l10n.size}: ${item.selectedSize.toLocalizedNum(context)}",
                                         style: TextStyle(
                                           color: Theme.of(
                                             context,
@@ -122,7 +123,8 @@ class CartScreen extends StatelessWidget {
                                       ),
                                       const SizedBox(height: 6),
                                       Text(
-                                        "\$${(item.product.price * item.quantity).toStringAsFixed(2)}",
+                                        "\$${(item.product.price * item.quantity).toStringAsFixed(2)}"
+                                            .toLocalizedNum(context),
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           color: Theme.of(context).primaryColor,
@@ -179,7 +181,9 @@ class CartScreen extends StatelessWidget {
                                             ),
                                           ),
                                           Text(
-                                            "${item.quantity}",
+                                            item.quantity
+                                                .toString()
+                                                .toLocalizedNum(context),
                                             style: const TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 13,
@@ -228,7 +232,8 @@ class CartScreen extends StatelessWidget {
                             _buildPriceRow(
                               context,
                               l10n.subTotal,
-                              "\$${cartProvider.subtotalAmount.toStringAsFixed(2)}",
+                              "\$${cartProvider.subtotalAmount.toStringAsFixed(2)}"
+                                  .toLocalizedNum(context),
                             ),
                             const SizedBox(height: 10),
                             _buildPriceRow(
@@ -236,7 +241,8 @@ class CartScreen extends StatelessWidget {
                               l10n.shippingFee,
                               cartProvider.shippingFee == 0
                                   ? "Free"
-                                  : "\$${cartProvider.shippingFee.toStringAsFixed(2)}",
+                                  : "\$${cartProvider.shippingFee.toStringAsFixed(2)}"
+                                        .toLocalizedNum(context),
                             ),
                             Padding(
                               padding: const EdgeInsets.symmetric(
@@ -251,7 +257,8 @@ class CartScreen extends StatelessWidget {
                             _buildPriceRow(
                               context,
                               l10n.totalPrice,
-                              "\$${cartProvider.totalAmount.toStringAsFixed(2)}",
+                              "\$${cartProvider.totalAmount.toStringAsFixed(2)}"
+                                  .toLocalizedNum(context),
                               isTotal: true,
                             ),
                           ],
