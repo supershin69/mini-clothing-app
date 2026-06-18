@@ -12,7 +12,7 @@ class ApiService {
   late final _storage = const FlutterSecureStorage();
   final BuildContext context;
 
-  final String baseUrl = 'https://clothing-store-api-vt3r.onrender.com';
+  final String baseUrl = 'https://anthology-trombone-knelt.ngrok-free.dev';
 
   ApiService(this.context) {
     _dio.options.baseUrl = baseUrl;

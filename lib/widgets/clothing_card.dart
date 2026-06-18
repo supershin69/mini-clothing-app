@@ -11,11 +11,10 @@ class ClothingCard extends StatelessWidget {
 
   const ClothingCard({super.key, required this.product, required this.onTap});
 
-  // 🔥 Quick Add to Cart Bottom Sheet ကို ခေါ်ယူမည့် Function
   void _openQuickAddToCart(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      isScrollControlled: true, // Keyboard တက်လာရင် ကန်မတက်အောင် ကာကွယ်ရန်
+      isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (context) => _QuickAddToCartBottomSheet(product: product),
     );
@@ -46,7 +45,6 @@ class ClothingCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Image Stack Area (မူလအတိုင်း)
             Expanded(
               child: Stack(
                 children: [
@@ -145,7 +143,6 @@ class ClothingCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
 
-                  // 🔥 ပြင်ဆင်လိုက်သည့် နေရာ - Price နှင့် Cart Button ကို Row ဖြင့် ညှပ်ထားပါတယ်
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -160,7 +157,7 @@ class ClothingCard extends StatelessWidget {
                           ),
                         ),
                       ),
-                      if (!isOutOfStock) // ပစ္စည်းရှိမှသာ ဝယ်လို့ရမည့် Button ကို ပြပါမည်
+                      if (!isOutOfStock)
                         GestureDetector(
                           onTap: () => _openQuickAddToCart(context),
                           child: Container(
@@ -189,9 +186,6 @@ class ClothingCard extends StatelessWidget {
   }
 }
 
-// ==========================================
-// 🔥 အောက်ကနေ ပွင့်လာမည့် Quick Add to Cart Sheet (Stateful Component)
-// ==========================================
 class _QuickAddToCartBottomSheet extends StatefulWidget {
   final ProductModel product;
   const _QuickAddToCartBottomSheet({required this.product});
@@ -253,10 +247,9 @@ class _QuickAddToCartBottomSheetState
         borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
       ),
       child: Column(
-        mainAxisSize: MainAxisSize.min, // Content ရှိသလောက်ပဲ အမြင့်ယူရန်
+        mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Drag Handle Area
           Center(
             child: Container(
               width: 40,
@@ -269,7 +262,6 @@ class _QuickAddToCartBottomSheetState
             ),
           ),
 
-          // Mini Product Info Header
           Row(
             children: [
               ClipRRect(
@@ -324,7 +316,6 @@ class _QuickAddToCartBottomSheetState
           // Quantity and Add to Cart Action Row
           Row(
             children: [
-              // Quantity Counter (မင်းဆောက်ထားတဲ့ UX အတိုင်း)
               Container(
                 height: 44,
                 decoration: BoxDecoration(
@@ -415,7 +406,7 @@ class _QuickAddToCartBottomSheetState
                               _quantity,
                             );
 
-                            Navigator.pop(context); // Bottom Sheet ပိတ်လိုက်မယ်
+                            Navigator.pop(context);
 
                             final isMyanmar =
                                 Localizations.localeOf(context).languageCode ==
