@@ -9,16 +9,17 @@ class NotificationProvider extends ChangeNotifier {
   List<NotificationModel> get notifications => _notifications;
   bool get isLoading => _isLoading;
 
-  // အဖတ်ရသေးတဲ့ Notification အရေအတွက်ကို လှမ်းတွက်ပေးမယ့် Getter
   int get unreadCount => _notifications.where((n) => !n.isRead).length;
 
-  Future<void> loadNotifications(BuildContext context, String userId) async {
+  // 👈 🛠 userId parameter ကို ဖြုတ်လိုက်ပါပြီ
+  Future<void> loadNotifications(BuildContext context) async {
     _isLoading = true;
     notifyListeners();
 
     try {
       final apiService = ApiService(context);
-      _notifications = await apiService.fetchNotifications(userId);
+      _notifications = await apiService
+          .fetchNotifications(); // API Service က Interceptor အတိုင်း အလုပ်လုပ်ပါမယ်
     } catch (e) {
       print("Error loading notifications: $e");
     } finally {
@@ -34,7 +35,6 @@ class NotificationProvider extends ChangeNotifier {
 
       final index = _notifications.indexWhere((n) => n.id == id);
       if (index != -1) {
-        // UI မှာ ချက်ချင်း အပြောင်းအလဲမြင်ရအောင် Local State ကိုပါ Update လုပ်ပေးပါတယ်
         _notifications[index] = NotificationModel(
           id: _notifications[index].id,
           userId: _notifications[index].userId,
@@ -51,10 +51,11 @@ class NotificationProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> markAllAsRead(BuildContext context, String userId) async {
+  // 👈 🛠 userId parameter ကို ဖြုတ်လိုက်ပါပြီ
+  Future<void> markAllAsRead(BuildContext context) async {
     try {
       final apiService = ApiService(context);
-      await apiService.markAllNotificationsAsRead(userId);
+      await apiService.markAllNotificationsAsRead();
 
       _notifications = _notifications.map((n) {
         return NotificationModel(
@@ -73,7 +74,6 @@ class NotificationProvider extends ChangeNotifier {
     }
   }
 
-  // Logout လုပ်တဲ့အခါ Notification data တွေကို ရှင်းပစ်ဖို့
   void clearNotifications() {
     _notifications = [];
     notifyListeners();

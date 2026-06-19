@@ -51,10 +51,7 @@ class _MainWrapperState extends State<MainWrapper> {
         _currentUserId = profile.id;
       });
       if (mounted && _currentUserId != null) {
-        context.read<NotificationProvider>().loadNotifications(
-          context,
-          _currentUserId!,
-        );
+        context.read<NotificationProvider>().loadNotifications(context);
       }
     } catch (e) {
       print("Failed to sync profile for notifications: $e");
@@ -116,7 +113,7 @@ class _MainWrapperState extends State<MainWrapper> {
       const ClothingScreen(),
       const CartScreen(),
       _currentUserId != null
-          ? NotificationScreen(userId: _currentUserId!)
+          ? NotificationScreen()
           : Center(child: Text(l10n.loginToSeeNotifications)),
       profileTab,
     ];

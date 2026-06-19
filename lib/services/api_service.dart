@@ -23,7 +23,6 @@ class ApiService {
     _dio.options.headers = {
       'Content-Type': 'application/json',
       'ngrok-skip-browser-warning': 'true',
-      //!'bypass-tunnel-reminder': 'true',
     };
 
     _dio.interceptors.add(
@@ -41,17 +40,37 @@ class ApiService {
           if (token != null) {
             options.headers['Authorization'] = 'Bearer $token';
           }
+
+          // 👈 [အသက်] URL ထဲမှာ {userId} ပုံသေစာသား ပါဝင်နေရင် Storage ထဲက ID နဲ့ လဲလှယ်ပေးမည့်စနစ်
+          if (options.path.contains('{userId}')) {
+            String? userId = await _storage.read(key: 'user_id');
+            if (userId != null) {
+              options.path = options.path.replaceAll('{userId}', userId);
+            }
+          }
+
           return handler.next(options);
         },
+
         onError: (DioException e, handler) async {
           if (e.response?.statusCode == 401) {
-            // Handle unauthorized error (e.g., token expired)
             await _storage.delete(key: 'auth_token');
+            await _storage.delete(
+              key: 'user_id',
+            ); // Token ပျက်ရင် User ID ပါ ဖျက်မယ်
           }
           return handler.next(e);
         },
       ),
     );
+  }
+
+  Future<String> _getStoredUserId() async {
+    final String? userId = await _storage.read(key: 'user_id');
+    if (userId == null || userId.isEmpty) {
+      throw Exception('User ID missing. Please login again.');
+    }
+    return userId;
   }
 
   // ၁။ Register User API
@@ -73,7 +92,7 @@ class ApiService {
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        print(" uccess: OTP sent to email automatically.");
+        print("Success: OTP sent to email automatically.");
         return;
       } else {
         throw Exception('Failed to register user');
@@ -114,10 +133,24 @@ class ApiService {
       if (response.statusCode == 200 || response.statusCode == 201) {
         final data = response.data;
         final authResponse = AuthResponseModel.fromJson(data);
+
+        // Token သိမ်းဆည်းခြင်း
         await _storage.write(
           key: 'auth_token',
           value: authResponse.accessToken,
         );
+
+        // Store the user ID for notification API routes.
+        final String authUserId = authResponse.user.id;
+        final String apiUserId =
+            data['user']?['id']?.toString() ??
+            data['user']?['_id']?.toString() ??
+            authUserId;
+
+        if (apiUserId.isNotEmpty) {
+          await _storage.write(key: 'user_id', value: apiUserId);
+        }
+
         return authResponse;
       } else {
         throw Exception('Failed to login user');
@@ -152,6 +185,9 @@ class ApiService {
   // ၅။ Logout User API
   Future<void> logoutUser() async {
     await _storage.delete(key: 'auth_token');
+    await _storage.delete(
+      key: 'user_id',
+    ); // 👈 Logout လုပ်ရင် user_id ပါ ရှင်းပစ်မယ်
   }
 
   // ၆။ Fetch User Profile API
@@ -160,7 +196,15 @@ class ApiService {
       final response = await _dio.get('/auth/profile');
       if (response.statusCode == 200) {
         final data = response.data;
-        return UserModel.fromJson(data);
+        final user = UserModel.fromJson(data);
+
+        // 👈 [ပြင်ဆင်ချက်] Profile ဆွဲလို့ အောင်မြင်တိုင်း နောက်ကွယ်က Interceptor သုံးနိုင်အောင် id ကို အမြဲ Update လုပ်သိမ်းပေးထားပါမယ်
+        await _storage.write(
+          key: 'user_id',
+          value: user.id.toString(),
+        ); // မင်းရဲ့ model id field က name အတိုင်း ပြောင်းပေးပါ (ဥပမာ- user.id သို့မဟုတ် user.sId)
+
+        return user;
       } else {
         throw Exception('Failed to load user profile');
       }
@@ -172,7 +216,7 @@ class ApiService {
     }
   }
 
-  // ၇။ Create Order (Checkout) API - Updated for the new JSON schema
+  // ၇။ Create Order (Checkout) API
   Future<Map<String, dynamic>> createOrder({
     required List<Map<String, dynamic>> items,
   }) async {
@@ -196,9 +240,7 @@ class ApiService {
   // ၈။ Fetch User Orders API
   Future<List<OrderModel>> fetchUserOrders() async {
     try {
-      // The backend should know which user to fetch orders for based on the Bearer Token
       final response = await _dio.get('/orders/me');
-
       if (response.statusCode == 200) {
         final List<dynamic> data = response.data;
         return data.map((item) => OrderModel.fromJson(item)).toList();
@@ -214,11 +256,35 @@ class ApiService {
   }
 
   // ၉။ Fetch User Notifications API
-  Future<List<NotificationModel>> fetchNotifications(String userId) async {
+  // 👈 [ပြင်ဆင်ချက်] String userId Parameter ကို ဖြုတ်လိုက်ပြီး အစားထိုးစနစ် ပြောင်းလဲထားပါတယ်
+  Future<List<NotificationModel>> fetchNotifications() async {
     try {
+      final userId = await _getStoredUserId();
       final response = await _dio.get('/notifications/user/$userId');
       if (response.statusCode == 200) {
-        final List<dynamic> data = response.data;
+        final responseData = response.data;
+        List<dynamic> data;
+
+        if (responseData is List) {
+          data = responseData;
+        } else if (responseData is Map<String, dynamic>) {
+          if (responseData['data'] is List) {
+            data = responseData['data'];
+          } else if (responseData['notifications'] is List) {
+            data = responseData['notifications'];
+          } else if (responseData['results'] is List) {
+            data = responseData['results'];
+          } else {
+            throw Exception(
+              'Unexpected notification payload format: ${responseData.keys.toList()}',
+            );
+          }
+        } else {
+          throw Exception(
+            'Unexpected notification payload type: ${responseData.runtimeType}',
+          );
+        }
+
         return data.map((item) => NotificationModel.fromJson(item)).toList();
       } else {
         throw Exception('Failed to load notifications');
@@ -238,8 +304,10 @@ class ApiService {
   }
 
   // ၁၁။ Mark All Notifications as Read API
-  Future<void> markAllNotificationsAsRead(String userId) async {
+  // 👈 [ပြင်ဆင်ချက်] String userId Parameter ကို ဖြုတ်လိုက်ပါပြီ
+  Future<void> markAllNotificationsAsRead() async {
     try {
+      final userId = await _getStoredUserId();
       await _dio.patch('/notifications/user/$userId/read-all');
     } on DioException catch (e) {
       throw Exception(e.response?.data['message'] ?? 'Dio error: ${e.message}');
