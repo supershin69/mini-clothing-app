@@ -4,6 +4,7 @@ import 'package:clothing_shop/services/api_service.dart'; // 👈 ApiService က
 import 'package:clothing_shop/state/cart_provider.dart';
 import 'package:clothing_shop/state/language_provider.dart';
 import 'package:clothing_shop/state/navigation_provider.dart';
+import 'package:clothing_shop/state/notification_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -23,6 +24,8 @@ void main() {
               ..updateApiService(ApiService(context));
           },
         ),
+
+        ChangeNotifierProvider(create: (context) => NotificationProvider()),
       ],
       child: const MyApp(),
     ),

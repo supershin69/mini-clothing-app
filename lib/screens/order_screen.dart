@@ -1,4 +1,5 @@
 import 'package:clothing_shop/l10n/app_localizations.dart';
+import 'package:clothing_shop/screens/order_detail_screen.dart';
 import 'package:flutter/material.dart';
 import '../models/order_model.dart';
 import '../services/api_service.dart';
@@ -127,6 +128,14 @@ class _OrderScreenState extends State<OrderScreen> {
                   ),
                   elevation: 2,
                   child: ListTile(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => OrderDetailScreen(order: order),
+                        ),
+                      );
+                    },
                     contentPadding: const EdgeInsets.all(15),
                     leading: Container(
                       padding: const EdgeInsets.all(10),

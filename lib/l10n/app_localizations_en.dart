@@ -153,4 +153,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get connectionError => 'Connection Error';
+
+  @override
+  String get notifications => 'noti';
 }

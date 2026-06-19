@@ -385,6 +385,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Connection Error'**
   String get connectionError;
+
+  /// No description provided for @notifications.
+  ///
+  /// In en, this message translates to:
+  /// **'noti'**
+  String get notifications;
 }
 
 class _AppLocalizationsDelegate

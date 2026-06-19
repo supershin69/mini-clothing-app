@@ -1,4 +1,5 @@
 import 'package:clothing_shop/models/auth_models.dart';
+import 'package:clothing_shop/models/notification_model.dart';
 import 'package:clothing_shop/models/order_model.dart';
 import 'package:clothing_shop/models/product_model.dart';
 import 'package:clothing_shop/state/language_provider.dart';
@@ -21,7 +22,7 @@ class ApiService {
 
     _dio.options.headers = {
       'Content-Type': 'application/json',
-      //!'ngrok-skip-browser-warning': 'true',
+      'ngrok-skip-browser-warning': 'true',
       //!'bypass-tunnel-reminder': 'true',
     };
 
@@ -209,6 +210,39 @@ class ApiService {
       throw Exception(e.response?.data['message'] ?? 'Dio error: ${e.message}');
     } catch (e) {
       throw Exception('Unexpected error: $e');
+    }
+  }
+
+  // ၉။ Fetch User Notifications API
+  Future<List<NotificationModel>> fetchNotifications(String userId) async {
+    try {
+      final response = await _dio.get('/notifications/user/$userId');
+      if (response.statusCode == 200) {
+        final List<dynamic> data = response.data;
+        return data.map((item) => NotificationModel.fromJson(item)).toList();
+      } else {
+        throw Exception('Failed to load notifications');
+      }
+    } on DioException catch (e) {
+      throw Exception(e.response?.data['message'] ?? 'Dio error: ${e.message}');
+    }
+  }
+
+  // ၁၀။ Mark Single Notification as Read API
+  Future<void> markNotificationAsRead(String id) async {
+    try {
+      await _dio.patch('/notifications/$id/read');
+    } on DioException catch (e) {
+      throw Exception(e.response?.data['message'] ?? 'Dio error: ${e.message}');
+    }
+  }
+
+  // ၁၁။ Mark All Notifications as Read API
+  Future<void> markAllNotificationsAsRead(String userId) async {
+    try {
+      await _dio.patch('/notifications/user/$userId/read-all');
+    } on DioException catch (e) {
+      throw Exception(e.response?.data['message'] ?? 'Dio error: ${e.message}');
     }
   }
 }

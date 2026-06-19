@@ -142,7 +142,6 @@ class ClothingCard extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 4),
-
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -271,6 +270,19 @@ class _QuickAddToCartBottomSheetState
                   width: 55,
                   height: 55,
                   fit: BoxFit.cover,
+                  // 🛠 ပြင်ဆင်ချက် (၁) - Bottom Sheet က Image မှာပါ Error Handler ထည့်လိုက်ပါတယ်
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      width: 55,
+                      height: 55,
+                      color: Colors.grey[200],
+                      child: const Icon(
+                        Icons.broken_image_outlined,
+                        size: 20,
+                        color: Colors.grey,
+                      ),
+                    );
+                  },
                 ),
               ),
               const SizedBox(width: 16),
@@ -323,6 +335,8 @@ class _QuickAddToCartBottomSheetState
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Row(
+                  mainAxisSize: MainAxisSize
+                      .min, // 👈 🛠 ပြင်ဆင်ချက် (၂) - လျှံထွက်မှုကို အဓိက တားဆီးပေးမည့်လိုင်း
                   children: [
                     IconButton(
                       icon: const Icon(Icons.remove, size: 16),

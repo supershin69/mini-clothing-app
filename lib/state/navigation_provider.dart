@@ -9,4 +9,9 @@ class NavigationProvider with ChangeNotifier {
     _currentIndex = index;
     notifyListeners();
   }
+
+  void goToNotifications() {
+    _currentIndex = 3;
+    notifyListeners();
+  }
 }

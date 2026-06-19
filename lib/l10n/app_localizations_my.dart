@@ -135,7 +135,7 @@ class AppLocalizationsMy extends AppLocalizations {
   String get orderOn => 'နေ့စွဲ';
 
   @override
-  String get logout => 'လော့ဂ်ေအောက်ထွက်ရန်';
+  String get logout => 'လော့ဂ်အောက်ထွက်ရန်';
 
   @override
   String get emailVerification => 'အီးမေးလ်အတည်ပြုခြင်း';
@@ -153,4 +153,7 @@ class AppLocalizationsMy extends AppLocalizations {
 
   @override
   String get connectionError => 'ဆက်သွယ်မှုပြတ်တောက်သွားပါသည်';
+
+  @override
+  String get notifications => 'နိုတီ';
 }
