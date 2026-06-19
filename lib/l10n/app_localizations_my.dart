@@ -156,4 +156,11 @@ class AppLocalizationsMy extends AppLocalizations {
 
   @override
   String get notifications => 'နိုတီ';
+
+  @override
+  String get loginToSeeNotifications =>
+      'ကျေးဇူးပြုပြီး notification ကြည့်ရန် လော့ဂ်အင်၀င်ပေးပါ';
+
+  @override
+  String get noNotification => 'Notification မရှိသေးပါ';
 }

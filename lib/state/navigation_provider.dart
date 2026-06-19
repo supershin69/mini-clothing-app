@@ -10,8 +10,9 @@ class NavigationProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void goToNotifications() {
-    _currentIndex = 3;
-    notifyListeners();
-  }
+  void goToHome() => changeTab(0);
+  void goToClothing() => changeTab(1);
+  void goToCart() => changeTab(2);
+  void goToNotifications() => changeTab(3);
+  void goToProfile() => changeTab(4);
 }

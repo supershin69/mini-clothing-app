@@ -48,5 +48,7 @@
     "verifyAndCreateAccount": "အီးမေးလ် အတည်ပြုပြီး အကောင့်ဖွင့်ပါ",
     "emptyClothingPage": "အ၀တ်အစားများ မတွေ့ပါ",
     "connectionError": "ဆက်သွယ်မှုပြတ်တောက်သွားပါသည်",
-    "notifications": "နိုတီ"
+    "notifications": "နိုတီ",
+    "loginToSeeNotifications": "ကျေးဇူးပြုပြီး notification ကြည့်ရန် လော့ဂ်အင်၀င်ပေးပါ",
+    "noNotification": "Notification မရှိသေးပါ"
 }

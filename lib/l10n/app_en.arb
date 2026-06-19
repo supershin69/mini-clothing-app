@@ -48,5 +48,7 @@
     "verifyAndCreateAccount": "Verify & Create Account",
     "emptyClothingPage": "No clothing found!",
     "connectionError": "Connection Error",
-    "notifications": "noti"
+    "notifications": "noti",
+    "loginToSeeNotifications": "Please login to see notifications",
+    "noNotification": "No notifications yet"
 }

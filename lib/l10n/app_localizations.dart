@@ -391,6 +391,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'noti'**
   String get notifications;
+
+  /// No description provided for @loginToSeeNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Please login to see notifications'**
+  String get loginToSeeNotifications;
+
+  /// No description provided for @noNotification.
+  ///
+  /// In en, this message translates to:
+  /// **'No notifications yet'**
+  String get noNotification;
 }
 
 class _AppLocalizationsDelegate

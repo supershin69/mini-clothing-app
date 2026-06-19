@@ -16,7 +16,7 @@ class NotificationScreen extends StatelessWidget {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(
-          "Notifications", // မင်းရဲ့ Localization Key အတိုင်း ပြောင်းသုံးနိုင်ပါတယ်
+          "Notifications",
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         actions: [
@@ -45,7 +45,7 @@ class NotificationScreen extends StatelessWidget {
           if (provider.notifications.isEmpty) {
             return Center(
               child: Text(
-                'No notifications yet',
+                l10n.noNotification,
                 style: TextStyle(color: Theme.of(context).disabledColor),
               ),
             );
@@ -65,9 +65,7 @@ class NotificationScreen extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: noti.isRead
                         ? Theme.of(context).colorScheme.surface
-                        : Theme.of(context).primaryColor.withOpacity(
-                            0.05,
-                          ), // မဖတ်ရသေးရင် အရောင်လင်းနေမယ်
+                        : Theme.of(context).primaryColor.withOpacity(0.05),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: ListTile(

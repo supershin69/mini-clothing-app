@@ -156,4 +156,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get notifications => 'noti';
+
+  @override
+  String get loginToSeeNotifications => 'Please login to see notifications';
+
+  @override
+  String get noNotification => 'No notifications yet';
 }

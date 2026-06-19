@@ -117,7 +117,7 @@ class _MainWrapperState extends State<MainWrapper> {
       const CartScreen(),
       _currentUserId != null
           ? NotificationScreen(userId: _currentUserId!)
-          : const Center(child: Text("Please login to see notifications")),
+          : Center(child: Text(l10n.loginToSeeNotifications)),
       profileTab,
     ];
 
@@ -181,9 +181,7 @@ class _MainWrapperState extends State<MainWrapper> {
                           .toString()
                           .toLocalizedNum(context),
               ),
-              isLabelVisible:
-                  notificationProvider.unreadCount >
-                  0, // ၀ ထက်ကြီးမှ ကိန်းဂဏန်း Badge ပြမယ်
+              isLabelVisible: notificationProvider.unreadCount > 0,
               child: const Icon(Icons.notifications),
             ),
             label: l10n.notifications,
