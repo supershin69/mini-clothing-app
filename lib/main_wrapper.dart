@@ -5,11 +5,11 @@ import 'package:clothing_shop/screens/home_screen.dart';
 import 'package:clothing_shop/screens/login_screen.dart';
 import 'package:clothing_shop/screens/profile_screen.dart';
 import 'package:clothing_shop/screens/signup_screen.dart';
-import 'package:clothing_shop/screens/notification_screen.dart'; // 👈 Import အသစ်
+import 'package:clothing_shop/screens/notification_screen.dart';
 import 'package:clothing_shop/state/language_provider.dart';
 import 'package:clothing_shop/state/navigation_provider.dart';
-import 'package:clothing_shop/state/notification_provider.dart'; // 👈 Import အသစ်
-import 'package:clothing_shop/services/api_service.dart'; // 👈 Profile ဆွဲရန် Import
+import 'package:clothing_shop/state/notification_provider.dart';
+import 'package:clothing_shop/services/api_service.dart';
 import 'package:clothing_shop/utils/string_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -25,7 +25,7 @@ class MainWrapper extends StatefulWidget {
 class _MainWrapperState extends State<MainWrapper> {
   bool _isLoggedIn = false;
   bool _showRegister = false;
-  String? _currentUserId; // 👈 User ID သိမ်းထားရန်
+  String? _currentUserId;
   final _storage = const FlutterSecureStorage();
 
   @override
@@ -40,7 +40,7 @@ class _MainWrapperState extends State<MainWrapper> {
       setState(() {
         _isLoggedIn = true;
       });
-      _loadUserDataAndNotifications(); // Token ရှိရင် Data တန်းခေါ်မယ်
+      _loadUserDataAndNotifications();
     }
   }
 
@@ -51,7 +51,6 @@ class _MainWrapperState extends State<MainWrapper> {
         _currentUserId = profile.id;
       });
       if (mounted && _currentUserId != null) {
-        // Notification Data တွေကို လှမ်းဆွဲခိုင်းလိုက်ခြင်း
         context.read<NotificationProvider>().loadNotifications(
           context,
           _currentUserId!,
@@ -65,8 +64,7 @@ class _MainWrapperState extends State<MainWrapper> {
   @override
   Widget build(BuildContext context) {
     final navigationProvider = context.watch<NavigationProvider>();
-    final notificationProvider = context
-        .watch<NotificationProvider>(); // 👈 BadgeCount အတွက် စောင့်ကြည့်ရန်
+    final notificationProvider = context.watch<NotificationProvider>();
     final l10n = AppLocalizations.of(context)!;
     final langProvider = Provider.of<LanguageProvider>(context);
 
@@ -75,9 +73,7 @@ class _MainWrapperState extends State<MainWrapper> {
     if (_isLoggedIn) {
       profileTab = ProfileScreen(
         onLogoutSuccess: () {
-          context
-              .read<NotificationProvider>()
-              .clearNotifications(); // Clear Noti on logout
+          context.read<NotificationProvider>().clearNotifications();
           setState(() {
             _isLoggedIn = false;
             _showRegister = false;
@@ -115,7 +111,6 @@ class _MainWrapperState extends State<MainWrapper> {
       );
     }
 
-    // 🛠 စာမျက်နှာ စုစုပေါင်း (၅) ခု ဖြစ်သွားပါပြီ (Notifications ကို အလယ်မှာ ညှပ်ထားပါတယ်)
     final List<Widget> screens = [
       const HomeScreen(),
       const ClothingScreen(),
@@ -177,21 +172,21 @@ class _MainWrapperState extends State<MainWrapper> {
             label: l10n.cart,
           ),
 
-          // 👈 🛠 ဤနေရာတွင် Badge စနစ် ထည့်သွင်းထားသော Notification Icon ဖြစ်ပါတယ်ဗျာ
           BottomNavigationBarItem(
             icon: Badge(
               label: Text(
-                notificationProvider.unreadCount.toString().toLocalizedNum(
-                  context,
-                ),
+                notificationProvider.unreadCount > 9
+                    ? "${9.toString().toLocalizedNum(context)}+"
+                    : notificationProvider.unreadCount
+                          .toString()
+                          .toLocalizedNum(context),
               ),
               isLabelVisible:
                   notificationProvider.unreadCount >
                   0, // ၀ ထက်ကြီးမှ ကိန်းဂဏန်း Badge ပြမယ်
               child: const Icon(Icons.notifications),
             ),
-            label: l10n
-                .notifications, // သို့မဟုတ် မင်းရဲ့ l10n.notifications သုံးပါ
+            label: l10n.notifications,
           ),
 
           BottomNavigationBarItem(
