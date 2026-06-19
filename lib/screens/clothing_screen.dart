@@ -1,8 +1,8 @@
 import 'package:clothing_shop/l10n/app_localizations.dart';
 import 'package:clothing_shop/screens/product_detail.dart';
-import 'package:clothing_shop/state/language_provider.dart'; // 👈 1. LanguageProvider ကို Import လုပ်ပါ
+import 'package:clothing_shop/state/language_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart'; // 👈 2. Provider ကို Import လုပ်ပါ
+import 'package:provider/provider.dart';
 import '../models/product_model.dart';
 import '../widgets/clothing_card.dart';
 import '../services/api_service.dart';
@@ -17,6 +17,8 @@ class ClothingScreen extends StatefulWidget {
 class _ClothingScreenState extends State<ClothingScreen> {
   late final ApiService _apiService;
 
+  late Future<List<ProductModel>> _productsFuture;
+
   String _searchQuery = '';
   String _selectedCategory = 'All';
   final List<String> _categories = ['All', 'Men', 'Women', 'Unisex'];
@@ -25,6 +27,14 @@ class _ClothingScreenState extends State<ClothingScreen> {
   void initState() {
     super.initState();
     _apiService = ApiService(context);
+
+    _productsFuture = _apiService.fetchProducts();
+  }
+
+  Future<void> _refreshProducts() async {
+    setState(() {
+      _productsFuture = _apiService.fetchProducts();
+    });
   }
 
   @override
@@ -114,69 +124,74 @@ class _ClothingScreenState extends State<ClothingScreen> {
           Expanded(
             child: Consumer<LanguageProvider>(
               builder: (context, langProvider, child) {
-                return FutureBuilder<List<ProductModel>>(
-                  future: _apiService.fetchProducts(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(
-                        child: CircularProgressIndicator(
-                          color: Theme.of(context).primaryColor,
-                        ),
-                      );
-                    }
-
-                    if (snapshot.hasError) {
-                      return _buildErrorState(snapshot.error.toString());
-                    }
-
-                    final masterProducts = snapshot.data ?? [];
-
-                    final filteredProducts = masterProducts.where((product) {
-                      final matchesSearch = product.name.toLowerCase().contains(
-                        _searchQuery.toLowerCase(),
-                      );
-                      final matchesCategory =
-                          _selectedCategory == 'All' ||
-                          product.gender.name.toLowerCase() ==
-                              _selectedCategory.toLowerCase();
-                      return matchesSearch && matchesCategory;
-                    }).toList();
-
-                    if (filteredProducts.isEmpty) {
-                      return _buildEmptyState();
-                    }
-
-                    return GridView.builder(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8.0,
-                        vertical: 8.0,
-                      ),
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 4,
-                            mainAxisSpacing: 8,
-                            childAspectRatio: 0.65,
+                return RefreshIndicator(
+                  onRefresh: _refreshProducts,
+                  color: Theme.of(context).primaryColor,
+                  child: FutureBuilder<List<ProductModel>>(
+                    future:
+                        _productsFuture, // 👈 ၅။ သိမ်းထားတဲ့ Cache Variable ကို ပြန်ညွှန်းပေးလိုက်ပါတယ်
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Center(
+                          child: CircularProgressIndicator(
+                            color: Theme.of(context).primaryColor,
                           ),
-                      itemCount: filteredProducts.length,
-                      itemBuilder: (context, index) {
-                        final product = filteredProducts[index];
-
-                        return ClothingCard(
-                          product: product,
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    ProductDetailPage(product: product),
-                              ),
-                            );
-                          },
                         );
-                      },
-                    );
-                  },
+                      }
+
+                      if (snapshot.hasError) {
+                        return _buildErrorState(snapshot.error.toString());
+                      }
+
+                      final masterProducts = snapshot.data ?? [];
+
+                      final filteredProducts = masterProducts.where((product) {
+                        final matchesSearch = product.name
+                            .toLowerCase()
+                            .contains(_searchQuery.toLowerCase());
+                        final matchesCategory =
+                            _selectedCategory == 'All' ||
+                            product.gender.name.toLowerCase() ==
+                                _selectedCategory.toLowerCase();
+                        return matchesSearch && matchesCategory;
+                      }).toList();
+
+                      if (filteredProducts.isEmpty) {
+                        return _buildEmptyState();
+                      }
+
+                      return GridView.builder(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8.0,
+                          vertical: 8.0,
+                        ),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 4,
+                              mainAxisSpacing: 8,
+                              childAspectRatio: 0.65,
+                            ),
+                        itemCount: filteredProducts.length,
+                        itemBuilder: (context, index) {
+                          final product = filteredProducts[index];
+
+                          return ClothingCard(
+                            product: product,
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      ProductDetailPage(product: product),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                      );
+                    },
+                  ),
                 );
               },
             ),
@@ -188,57 +203,77 @@ class _ClothingScreenState extends State<ClothingScreen> {
 
   Widget _buildEmptyState() {
     final l10n = AppLocalizations.of(context)!;
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.inventory_2_outlined,
-            size: 48,
-            color: Theme.of(context).disabledColor,
+    return SingleChildScrollView(
+      physics: const AlwaysScrollableScrollPhysics(),
+      child: SizedBox(
+        height: MediaQuery.of(context).size.height * 0.6,
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.inventory_2_outlined,
+                size: 48,
+                color: Theme.of(context).disabledColor,
+              ),
+              const SizedBox(height: 12),
+              Text(
+                l10n.emptyClothingPage,
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Theme.of(context).disabledColor,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
           ),
-          const SizedBox(height: 12),
-          Text(
-            l10n.emptyClothingPage,
-            style: TextStyle(
-              fontSize: 16,
-              color: Theme.of(context).disabledColor,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
 
   Widget _buildErrorState(String message) {
     final l10n = AppLocalizations.of(context)!;
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.cloud_off_rounded,
-              size: 48,
-              color: Theme.of(context).colorScheme.error,
+    return SingleChildScrollView(
+      physics: const AlwaysScrollableScrollPhysics(),
+      child: SizedBox(
+        height: MediaQuery.of(context).size.height * 0.6,
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.cloud_off_rounded,
+                  size: 48,
+                  color: Theme.of(context).colorScheme.error,
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  l10n.connectionError,
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  message,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Theme.of(context).disabledColor,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  "Pull down to retry",
+                  style: TextStyle(
+                    fontSize: 11,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(height: 12),
-            Text(
-              l10n.connectionError,
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              message,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 12,
-                color: Theme.of(context).disabledColor,
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );
