@@ -55,7 +55,9 @@ class OrderLineModel {
       id: json['id'] ?? '',
       quantity: json['quantity'] ?? 1,
       price: double.tryParse(json['price']?.toString() ?? '0.0') ?? 0.0,
-      productName: product['name'] ?? 'Unknown Product',
+
+      // 💡 🛠 Product Name မရှိရင် Backend ကလာတဲ့ variant_id ကိုပဲ 'ID: ...' ဆိုပြီး ပြထားလိုက်ပါမယ်
+      productName: product['name'] ?? 'ID: ${json['variant_id'] ?? "Unknown"}',
 
       selectedSize: variant['size'] ?? variant['color'] ?? 'N/A',
     );
